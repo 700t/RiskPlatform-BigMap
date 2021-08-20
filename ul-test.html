@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			/*input,li,ul,a{margin: 0; padding: 0;}如果删掉这句话，li的点会出现*/
+			
+			#ul li {
+				float: left;
+				clear: left;
+				position: relative;
+				width: auto;
+				padding-right: 12px;
+				padding-top: 10px;
+			}
+			
+			#ul i {
+				position: absolute;
+				right: 0;
+				top: 0;
+				color: #f00;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+
+	<body>
+		<input id="text" type="text" value="" /><br/>
+		<input id="btn" type="button" value="在ul中插入新内容" />
+		<button id="getfirst">获取第一个li</button>
+		<ul id="ul">
+			<!--<span>dfhl</span><i></i>-->
+		</ul>
+	</body>
+	<script>
+		var textObj = document.getElementById("text");
+		var btnObj = document.getElementById("btn");
+		var ulObj = document.getElementById("ul");
+		btnObj.onclick = function() { //点击按钮
+			var val = textObj.value;
+			var spanObj = ulObj.getElementsByTagName("span");
+			for(var i = 0; i < spanObj.length; i++) {
+				if(spanObj[i].innerHTML == val) {
+					alert("输入重复");
+					return;
+				} //强制跳出函数，并返回一个结果
+			}
+
+			var liNode = document.createElement("li");
+			liNode.innerHTML = "<span>" + val + "</span><i>x</i>";
+//			ulObj.appendChild(liNode);
+			ulObj.appendChild(liNode);
+			textObj.value = "";
+		};
+		ulObj.onclick = function(e) {
+			var event = e || window.event;
+			var target = event.target || event.srcElement;
+			if(target.nodeName == "I") { //此处应大写
+				target.parentNode.parentNode.removeChild(target.parentNode); //target是一个对象
+
+			}
+		}
+		
+		var first = document.getElementById('getfirst');
+		first.onclick = function(){
+			var li = document.getElementsByTagName('li')[0];
+//			console.log('first li:', li)
+
+			var val = textObj.value;
+			var liNode = document.createElement("li");
+			liNode.innerHTML = "<span>" + val + "</span><i>x</i>";
+			ulObj.insertBefore(liNode, li);
+		}
+	</script>
+
+</html>

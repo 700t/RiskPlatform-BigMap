@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="shortcut icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon">
+		<title>异常打卡</title>
+		<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<!--Bootstrap 3-->
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/layer/3.4.0/layer.min.js"></script>
+		<style type="text/css">
+			.row {
+				margin: 0 0 0 50px;
+			}
+			
+			.col-xs-4 {
+				padding-right: 0;
+				padding-left: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="row" id="row">
+			<!--<div class="col-xs-4">
+				<h4>第一次</h4>
+				<img width="50px" height="70px" layer-src="https://ssoimg.700t.com/risk_20210605_4f7b50f977484bd39a877f73ff2652bc.jpg" src="https://ssoimg.700t.com/risk_20210605_4f7b50f977484bd39a877f73ff2652bc.jpg">
+			</div>
+			<div class="col-xs-4">
+				<h4>第二次</h4>
+				<img width="50px" height="70px" layer-src="https://ssoimg.700t.com/risk_20210605_08f475f3009b48b980095b13d08daab2.jpg" src="https://ssoimg.700t.com/risk_20210605_08f475f3009b48b980095b13d08daab2.jpg">
+			</div>
+			<div class="col-xs-4">
+				<h4>第三次</h4>
+				<img width="50px" height="70px" layer-src="https://ssoimg.700t.com/risk_20210605_3ea38908d1b34941af698ccfb2a907ce.jpg" src="https://ssoimg.700t.com/risk_20210605_3ea38908d1b34941af698ccfb2a907ce.jpg">
+			</div>-->
+		</div>
+	</body>
+	<script type="text/javascript">
+		// 调用示例
+		$("body").on("click", ".col-xs-4 img", function(e) {
+			layer.photos({
+				photos: {
+					"data": [{
+						"src": e.target.src,
+					}]
+				}
+			});
+		});
+		
+		window.onload = function(){
+			let id = getQueryVariable('id');
+			let time = getQueryVariable('errortime');
+			console.log('1',time)
+			let tmptime = new Date(parseInt(time));
+			console.log('tmptime',tmptime)
+			let errortime = dateFormat("YYYY-mm-dd HH:MM:SS", tmptime)
+			console.log(errortime)
+//			return
+//			$.getJSON(`https://dltfaceui.700t.com/api/ClockreRord/Get_ClockFalisList_Details?workid=${id}&errortime=${errortime}`, function(res){
+			$.getJSON(`https://dltfaceui.700t.com/api/ClockreRord/Get_ClockFalisList_Details?workid=${id}&errortime=${errortime}`, function(res){
+				if(res.Code === 0){
+					let html = '';
+					$.each(res.Data, function(i, item){
+						html += `<div class="col-xs-4">
+								<h4>第${i+1}次</h4>
+								<h4>${item.ClockTime}</h4>
+								<img width="60px" height="80px" layer-src="${item.ClockPhoto}" src="${item.ClockPhoto}">
+								</div>`;
+					})
+//					document.getElementById('row').empty().append(html);
+					$('#row').empty().append(html);
+				}
+			})
+		}
+		
+		function getQueryVariable(variable){
+	       var query = window.location.search.substring(1);
+	       var vars = query.split("&");
+	       for (var i=0;i<vars.length;i++) {
+	               var pair = vars[i].split("=");
+	               if(pair[0] == variable){return pair[1];}
+	       }
+	       return(false);
+		}
+		
+		function dateFormat(fmt, date) {
+		    let ret;
+		    const opt = {
+		        "Y+": date.getFullYear().toString(),        // 年
+		        "m+": (date.getMonth() + 1).toString(),     // 月
+		        "d+": date.getDate().toString(),            // 日
+		        "H+": date.getHours().toString(),           // 时
+		        "M+": date.getMinutes().toString(),         // 分
+		        "S+": date.getSeconds().toString()          // 秒
+		        // 有其他格式化字符需求可以继续添加，必须转化成字符串
+		    };
+		    for (let k in opt) {
+		        ret = new RegExp("(" + k + ")").exec(fmt);
+		        if (ret) {
+		            fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+		        };
+		    };
+		    return fmt;
+		}
+	</script>
+
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+		<title>timeline</title>
+		<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<!--Bootstrap 3-->
+	    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/layer/3.4.0/layer.min.js"></script>
+
+		<style>
+			.timeline-small {
+				/*max-width: 350px;*/
+				max-height: 630px;
+				overflow: hidden;
+				margin: 30px auto 0;
+				box-shadow: 0 0 40px #a0a0a0;
+				font-family: 'Open Sans', sans-serif;
+			}
+			
+			.timeline-small-body ul {
+				padding: 1em 0 0 2em;
+				margin: 0;
+				list-style: none;
+				position: relative;
+			}
+			
+			.timeline-small-body ul::before {
+				content: ' ';
+				height: 100%;
+				width: 5px;
+				background-color: #d9d9d9;
+				position: absolute;
+				top: 0;
+				left: 2.4em;
+				z-index: -1;
+			}
+			
+			.timeline-small-body li div {
+				display: inline-block;
+				margin: 1em 0;
+				vertical-align: top;
+			}
+			
+			.timeline-small-body .bullet {
+				width: 1rem;
+				height: 1rem;
+				box-sizing: border-box;
+				border-radius: 50%;
+				background: #fff;
+				z-index: 1;
+				margin-right: 1rem;
+				margin-top: 7%;
+			}
+			
+			.timeline-small-body .bullet.pink {
+				background-color: hotpink;
+				border: 3px solid #F93B69;
+			}
+			
+			.timeline-small-body .bullet.green {
+				background-color: lightseagreen;
+				border: 3px solid #B0E8E2;
+			}
+			
+			.timeline-small-body .bullet.blue {
+				background-color: aquamarine;
+				border: 3px solid cadetblue;
+			}
+			
+			.timeline-small-body .bullet.orange {
+				background-color: salmon;
+				border: 3px solid #EB8B6E;
+			}
+			
+			.timeline-small-body .date {
+				width: 23%;
+				font-size: 0.75em;
+				padding-top: 0.40rem;
+				padding-right: 2rem;
+			}
+			
+			.timeline-small-body .desc {
+				width: 50%;
+			}
+			
+			.timeline-small-body h3 {
+				font-size: 0.9em;
+				font-weight: 400;
+				margin: 0;
+			}
+			
+			.timeline-small-body h4 {
+				margin: 0;
+				font-size: 0.7em;
+				font-weight: 400;
+				color: #808080;
+			}
+			.row{
+				margin: 0 0;
+			}
+			.col-xs-4{
+				padding-right: 0;
+				padding-left: 0;
+			}
+			.ul-title{
+				font-size: 1.2em;
+				font-weight: 600;
+				margin-left: 1em;
+			}
+			.detail-val{
+				margin-right: 2em;
+			}
+			#detail-part{
+				margin-left: 1.5em;
+				margin-top: 1em;
+				font-weight: 500;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="row" id="detail-part">
+		</div>
+		<div class="row" id="row">
+			<div class="col-xs-4">
+				<!-- 主要内容部分 -->
+				<div class="timeline-small">
+					<div class="timeline-small-body">			
+						<ul>
+							<div class="ul-title">作业准备</div>
+							<li>
+								<div class="bullet pink"></div>
+								<!--<div class="date">XXXX年XX月XX日</div>-->
+								<div class="desc">
+									<h3>现场勘查</h3>
+									<div class="layer-photos-demo" id="xianchangkancha">
+										<!--<img width="40px" height="60px" layer-src="https://ssoimg.700t.com/risk_20210507_355bf622657f4fb98a1e79504967e5be.png" src="https://ssoimg.700t.com/risk_20210507_355bf622657f4fb98a1e79504967e5be.png">-->
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="bullet orange"></div>
+								<!--<div class="date">XXXX年XX月XX日</div>-->
+								<div class="desc">
+									<h3>风险评估</h3>
+									<div class="layer-photos-demo" id="fengxianpinggu">
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="bullet blue"></div>
+								<!--<div class="date">XXXX年XX月XX日</div>-->
+								<div class="desc">
+									<h3>承载力分析</h3>
+									<div class="layer-photos-demo" id="chengzailifenxi">
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="bullet green"></div>
+								<!--<div class="date">XXXX年XX月XX日</div>-->
+								<div class="desc">
+									<h3>三措一案</h3>
+									<div class="layer-photos-demo" id="sancuoyian">
+									</div>
+								</div>
+							</li>
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-4">
+				<!-- 主要内容部分 -->
+				<div class="timeline-small">
+					<div class="timeline-small-body">
+						
+						<ul>
+							<div class="ul-title">作业实施</div>
+							<li>
+								<div class="bullet pink"></div>
+								<!--<div class="date">XXXX年XX月XX日</div>-->
+								<div class="desc">
+									<h3>安全交底</h3>
+									<div class="layer-photos-demo" id="anquanjiaodi">
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="bullet orange"></div>
+								<!--<div class="date">XXXX年XX月XX日</div>-->
+								<div class="desc">
+									<h3>安全工器具及施工机具</h3>
+									<div class="layer-photos-demo" id="anquangongqiju">
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="bullet blue"></div>
+								<!--<div class="date">XXXX年XX月XX日</div>-->
+								<div class="desc">
+									<h3>安全措施布置</h3>
+									<div class="layer-photos-demo" id="anquancuoshi">
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-4">
+				<!-- 主要内容部分 -->
+				<div class="timeline-small">
+					<div class="timeline-small-body">
+						
+						<ul>
+							<div class="ul-title">作业终结</div>
+							<li>
+								<div class="bullet green"></div>
+								<!--<div class="date">XXXX年XX月XX日</div>-->
+								<div class="desc">
+									<h3>工作票终结</h3>
+									<div class="layer-photos-demo" id="gongzuopiaozongjie">
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="bullet green"></div>
+								<!--<div class="date">XXXX年XX月XX日</div>-->
+								<div class="desc">
+									<h3>班后会</h3>
+									<div class="layer-photos-demo" id="banhouhui">
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+<script type="text/javascript">
+	$(function(){		
+		let id = getQueryVariable('id');
+		if(id){
+			showDetail(id)
+			showWorkFile(id)
+		}
+//		console.log('进入'+id)
+	})
+	
+	function showDetail(id){
+		$.getJSON('https://dltfaceapi.700t.com/api/ScheduleExtend/'+id, function(res){
+			if(res.Code==200){
+				let t = res.Data;
+				var html = '<div><span>专业管理部门：</span><span class="detail-val">'+t.job.ProManageDepartment+'</span>'+
+				'<span>建管单位：</span><span class="detail-val">'+t.detail.ManageCompany+'</span>'+
+				'<span>施工单位：</span><span class="detail-val">'+t.job.ConstructCompany+'</span>'+
+				'<span>分包单位：</span><span class="detail-val">'+t.detail.SubpackageCompany+'</span></div>'+
+				'<div><span>监理单位：</span><span class="detail-val">'+t.detail.SupervisorCompany+'</span>'+
+				'<span>工作负责人：</span><span class="detail-val">'+t.job.WorkDirector+'</span>'+
+				'<span>到岗到位人员：</span><span class="detail-val"></span></div>';
+				
+				$('#detail-part').append(html);
+			}
+		})
+	}
+	
+	function showWorkFile(id){
+		$.getJSON('https://dltfaceapi.700t.com/api/WorkFile/Get/'+id, function(res){
+//	$.getJSON('https://dltfaceapi.700t.com/api/WorkFile/Get/17', function(res){
+				if(res.Code===200){
+					console.log('data:', res.Data)
+					if(res.Data){
+						var html = '';
+						$.each(res.Data, function(i, item) {
+//							if(item.CategoryName == '现场勘查'){
+//								$.each(item.FlowFiles.split(','), function(j, p) {
+//									html += '<img width="40px" height="60px" layer-src="'+p+'" src="'+p+'">'
+//								});
+//								$('#xianchangkancha').append(html);
+//								html.clear;
+//							}
+							if(item.CategoryName == '风险评估'){
+								$.each(item.FlowFiles.split(','), function(j, p) {
+									html += '<img width="40px" height="60px" layer-src="'+p+'" src="'+p+'">'
+								});
+								$('#fengxianpinggu').append(html);
+								html.clear;
+							}
+							if(item.CategoryName == '承载力分析'){
+								$.each(item.FlowFiles.split(','), function(j, p) {
+									html += '<img width="40px" height="60px" layer-src="'+p+'" src="'+p+'">'
+								});
+								$('#chengzailifenxi').append(html);
+								html.clear;
+							}
+							if(item.CategoryName == '三措一案'){
+								$.each(item.FlowFiles.split(','), function(j, p) {
+									html += '<img width="40px" height="60px" layer-src="'+p+'" src="'+p+'">'
+								});
+								$('#sancuoyian').append(html);
+								html.clear;
+							}
+							if(item.CategoryName == '安全交底'){
+								$.each(item.FlowFiles.split(','), function(j, p) {
+									html += '<img width="50px" height="70px" layer-src="'+p+'" src="'+p+'">'
+								});
+								$('#anquanjiaodi').append(html);
+								html.clear;
+							}
+							if(item.CategoryName == '安全工器具及施工机具'){
+								$.each(item.FlowFiles.split(','), function(j, p) {
+									html += '<img width="50px" height="70px" layer-src="'+p+'" src="'+p+'">'
+								});
+								$('#anquangongqiju').append(html);
+								html.clear;
+							}
+							if(item.CategoryName == '安全措施布置'){
+								$.each(item.FlowFiles.split(','), function(j, p) {
+									html += '<img width="50px" height="70px" layer-src="'+p+'" src="'+p+'">'
+								});
+								$('#anquancuoshi').append(html);
+								html.clear;
+							}
+							if(item.CategoryName == '工作票终结'){
+								$.each(item.FlowFiles.split(','), function(j, p) {
+									html += '<img width="50px" height="70px" layer-src="'+p+'" src="'+p+'">'
+								});
+								$('#gongzuopiaozongjie').append(html);
+								html.clear;
+							}
+							if(item.CategoryName == '班后会'){
+								$.each(item.FlowFiles.split(','), function(j, p) {
+									html += '<img width="50px" height="70px" layer-src="'+p+'" src="'+p+'">'
+								});
+								$('#banhouhui').append(html);
+								html.clear;
+							}
+						});
+					}
+				}
+			})
+	}
+	
+//	//调用示例
+//	layer.photos({
+////	  photos: '#layer-photos-demo'
+//	  photos: '.layer-photos-demo'
+////	  photos: '#row'
+//	  ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+//	  ,tab: function(pic, layero){
+//	    console.log(pic) //当前图片的一些信息
+//	  }
+//	});
+
+	// 调用示例
+    $("body").on("click",".layer-photos-demo img",function(e){
+          layer.photos({
+                 photos: { "data": [{"src": e.target.src,}]}
+          });
+    });
+	
+	function getQueryVariable(variable){
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return(false);
+	}
+</script>
+</html>

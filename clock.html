@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="shortcut icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon">
+		<title>打卡情况</title>
+		<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<!--Bootstrap 3-->
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/layer/3.4.0/layer.min.js"></script>
+		<style type="text/css">
+			.row {
+				margin: 0 0 0 50px;
+			}
+
+			.col-xs-4 {
+				padding-right: 0;
+				padding-left: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="row" id="row">
+			<h4>打卡情况</h4>
+			<!--<div class="col-xs-4">
+				<h4>第一次</h4>
+				<img width="50px" height="70px" layer-src="https://ssoimg.700t.com/risk_20210605_4f7b50f977484bd39a877f73ff2652bc.jpg" src="https://ssoimg.700t.com/risk_20210605_4f7b50f977484bd39a877f73ff2652bc.jpg">
+			</div>
+			<div class="col-xs-4">
+				<h4>第二次</h4>
+				<img width="50px" height="70px" layer-src="https://ssoimg.700t.com/risk_20210605_08f475f3009b48b980095b13d08daab2.jpg" src="https://ssoimg.700t.com/risk_20210605_08f475f3009b48b980095b13d08daab2.jpg">
+			</div>
+			<div class="col-xs-4">
+				<h4>第三次</h4>
+				<img width="50px" height="70px" layer-src="https://ssoimg.700t.com/risk_20210605_3ea38908d1b34941af698ccfb2a907ce.jpg" src="https://ssoimg.700t.com/risk_20210605_3ea38908d1b34941af698ccfb2a907ce.jpg">
+			</div>-->
+		</div>
+	</body>
+	<script type="text/javascript">
+		// 调用示例
+		$("body").on("click", ".col-xs-4 img", function(e) {
+			layer.photos({
+				photos: {
+					"data": [{
+						"src": e.target.src,
+					}]
+				}
+			});
+		});
+
+		window.onload = function() {
+			let id = getQueryVariable('id');
+			$.getJSON(`https://dltfaceui.700t.com/api/ClockreRord/Get_WebClockreRordList_Statistics?WorkId=${id}`,
+				function(res) {
+					if (res.Code === 0) {
+						let html = '';
+						let arr = res.Data;
+						//处理原数组
+						for (var i = 0; i < arr.length; i++) {
+							var timeitem = transDate(arr[i].ClockTime);
+							//					    console.log(arr[i].ClockTime);
+							arr[i].Date = timeitem;
+						}
+						console.log('添加日期后:', arr)
+
+						const clockMap = mapGroupByDate(arr);
+						console.log(clockMap);
+						clockMap.forEach(function(value, key) {
+							console.log("key", key, "value", value)
+							html += `<div class="col-xs-4"><h4>${key}</h4>`;
+							value.forEach(function(item) {
+								html += `<h4>${item.Name} ${item.ClockTime}</h4>`;
+								html +=
+									`<img width="60px" height="80px" layer-src="${item.ClockPhoto}" src="${item.ClockPhoto}">`
+							})
+							html += '</div>';
+							$('#row').empty().append(html);
+						})
+					}
+				})
+		}
+
+		//按日期分组数据
+		const mapGroupByDate = function(arr) {
+			//  let newArr = [];
+			let clockMap = new Map();
+			arr.forEach((item, i) => {
+				let that = clockMap.get(item.Date);
+				if (!clockMap.get(item.Date)) {
+					clockMap.set(item.Date, [{
+						Name: item.Name,
+						ClockTime: item.ClockTime,
+						ClockPhoto: item.ClockPhoto
+					}]);
+				} else {
+					let objArr = clockMap.get(item.Date);
+					objArr.push({
+						Name: item.Name,
+						ClockTime: item.ClockTime,
+						ClockPhoto: item.ClockPhoto
+					});
+					clockMap.set(item.Date, objArr);
+				}
+			});
+			return clockMap;
+		};
+
+		//转换时间为 年-月-日 格式
+		function transDate(n) {
+			var date = new Date(n);
+			var Y = date.getFullYear() + '-';
+			var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+			var D = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+			return (Y + M + D)
+		}
+
+		function getQueryVariable(variable) {
+			var query = window.location.search.substring(1);
+			var vars = query.split("&");
+			for (var i = 0; i < vars.length; i++) {
+				var pair = vars[i].split("=");
+				if (pair[0] == variable) {
+					return pair[1];
+				}
+			}
+			return (false);
+		}
+
+		function dateFormat(fmt, date) {
+			let ret;
+			const opt = {
+				"Y+": date.getFullYear().toString(), // 年
+				"m+": (date.getMonth() + 1).toString(), // 月
+				"d+": date.getDate().toString(), // 日
+				"H+": date.getHours().toString(), // 时
+				"M+": date.getMinutes().toString(), // 分
+				"S+": date.getSeconds().toString() // 秒
+				// 有其他格式化字符需求可以继续添加，必须转化成字符串
+			};
+			for (let k in opt) {
+				ret = new RegExp("(" + k + ")").exec(fmt);
+				if (ret) {
+					fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+				};
+			};
+			return fmt;
+		}
+	</script>
+</html>

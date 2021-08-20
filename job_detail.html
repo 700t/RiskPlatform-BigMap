@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>计划进行详情</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+		<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<style type="text/css">
+			.card {
+				margin-top: .5rem;
+			}
+
+			.table {
+				border-collapse: separate;
+				border-spacing: 0;
+				border-radius: .25rem;
+				font-size: .35rem;
+			}
+			.card-body{
+				padding-bottom: 0;
+			}
+
+			.work-card {
+				font-size: .45rem;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="card">
+						<div class="card-body work-card">
+							<h5 class="text-center"><b>作业内容展示</b></h5>
+							<div class="work-content">
+								<p><b>任务名称：</b>达州达川10Kv瓮飞线新建工程</p>
+								<p><b>工作地点：</b>斌郎三品山村、金丰村</p>
+								<p><b>专业名称：</b>农配网工程</p>
+								<p><b>作业单位：</b>四川惠特电力投资建设有限公司</p>
+								<p><b>工作班组：</b>惠特公司施工队</p>
+								<p><b>预控措施：</b>做好施工现场安全管控</p>
+								<p><b>工作负责人：</b>蒋存 15892991695</p>
+								<p><b>企业用工人数：</b>2人</p>
+								<p><b>外来用工人数：</b>12人</p>
+								<p><b>到岗到位人员：</b>无</p>
+								<p><b>电网运检等级：</b>四</p>
+								<p><b>计划当前状态：</b>执行中</p>
+							</div>
+						</div>
+					</div>
+					<div class="card" style="height: 50%;">
+						<div class="card-body">
+							<div id="left-buttom-container" style="height: 100%"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="card-body" style="width: 100%;height: 100%;overflow：hidden;">
+						<div id="middle-container" style="width: 100%;height: 100%;position: absolute;left: 0px;"></div>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="text-center"><b>已识别人员信息</b></h5>
+							<table class="table">
+								<tr>
+									<th>打卡时间</th>
+									<th>打卡人员</th>
+									<th>所属公司</th>
+								</tr>
+								<tr>
+									<td>2021-08-20 08:22:36</td>
+									<td>张三</td>
+									<td>四川惠特电力投资建设有限公司</td>
+								</tr>
+								<tr>
+									<td>2021-08-20 08:22:36</td>
+									<td>张三</td>
+									<td>四川惠特电力投资建设有限公司</td>
+								</tr>
+								<tr>
+									<td>2021-08-20 08:22:36</td>
+									<td>张三</td>
+									<td>四川惠特电力投资建设有限公司</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="card">						
+						<div class="card-body">
+							<h5 class="text-center"><b>告警信息</b></h5>
+							<div class="warn-content">内容</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+	<script src="assets/detail.js" type="text/javascript" charset="utf-8"></script>
+	<script src="assets/echarts/middle.js" type="text/javascript" charset="utf-8"></script>
+	<script src="assets/echarts/left-buttom.js" type="text/javascript" charset="utf-8"></script>
+</html>
