@@ -679,8 +679,8 @@ map.setView({ lat: 31.18930843952816, lng: 107.50946044921876 }, 9);
 	
 	map.on('click',onMapClick);
 	
-//	var baseUrl = 'http://localhost:5000/';
-	var baseUrl = 'https://dltfaceui.700t.com/';
+	var baseUrl = 'http://localhost:5000/';
+	// var baseUrl = 'https://dltfaceui.700t.com/';
 
 	$(document).ready(function(){
 		getTodayJobs();
@@ -752,7 +752,7 @@ map.setView({ lat: 31.18930843952816, lng: 107.50946044921876 }, 9);
 
 //获取日计划
 function getTodayJobs(){
-	$.getJSON(baseUrl+'api/ScheduleExtend', function(res){
+	$.getJSON(`${baseUrl}api/ScheduleExtend`, function(res){
 		console.log(res)
 		if(res.Code != 200){
 			console.log('加载日计划出错');
@@ -805,7 +805,7 @@ function showJobDetail(id){
 	}
 	
 	function workView(){
-		$.getJSON('https://dltfaceui.700t.com/api/Job/TodayJobTotal', function(res){
+		$.getJSON(`${baseUrl}api/Job/TodayJobTotal`, function(res){
 //			console.log(res)
 			if(res.Code===200){
 				$('#today-total').text(res.Data.total);
@@ -815,7 +815,7 @@ function showJobDetail(id){
 	}
 	
 	function jobView(){
-		$.getJSON('https://dltfaceui.700t.com/api/Job/JobStartTotal', function(res){
+		$.getJSON(`${baseUrl}api/Job/JobStartTotal`, function(res){
 //			console.log(res)
 			if(res.Code===200){
 				let d = res.Data;
@@ -852,7 +852,7 @@ function showJobDetail(id){
 	}
 	
 	function riskView(){
-		$.getJSON('https://dltfaceui.700t.com/api/Job/RiskTotal', function(res){
+		$.getJSON(`${baseUrl}api/Job/RiskTotal`, function(res){
 //			console.log(res)
 			if(res.Code===200){
 				var d = res.Data;
@@ -950,7 +950,7 @@ function showJobDetail(id){
 	function getAttendFail(){
 //		console.error('请求异常打卡 ')
 //		$.getJSON('https://dltfaceui.700t.com/api/ClockreRord/Get_ClockFalisList', function(res){
-		$.getJSON(baseUrl+'api/Clock/Fails', function(res){
+		$.getJSON(`${baseUrl}api/Clock/Fails`, function(res){
 			if(res.Code === 200){
 				let html = ''
 				$.each(res.Data, function(index, item) {

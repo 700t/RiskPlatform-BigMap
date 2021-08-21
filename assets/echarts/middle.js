@@ -82,9 +82,9 @@ option = {
 
 if (option && typeof option === 'object') {
 	myChart.setOption(option);
-	setTimeout(function() {
-		window.onresize = function() {
-			myChart.resize();
-		}
-	}, 200)
+	// setTimeout(function() {
+	// 	window.onresize = function() {
+	// 		myChart.resize();
+	// 	}
+	// }, 200)
 }
