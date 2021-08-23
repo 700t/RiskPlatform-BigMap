@@ -1,11 +1,11 @@
 // var baseUrl = 'https://dltfaceui.700t.com/';
-var baseUrl = 'http://localhost:5000/';
+// var baseUrl = 'http://localhost:5000/';
 
 var jobId = getQueryVariable('id');
-console.log(jobId)
+// console.log(jobId)
 var jobs = JSON.parse(localStorage.getItem('todayJobs'));
 var job = jobs.find((c) => c.Id == jobId);
-console.log('thisJob', job)
+// console.log('thisJob', job)
 if (job) {
 	let html = `<p><b>任务名称：</b>${job.ScheduleName}</p>
 				<p><b>工作地点：</b>${job.WorkAddress}</p>
@@ -22,9 +22,9 @@ if (job) {
 	document.getElementsByClassName('work-content')[0].innerHTML = html;
 }
 
-$.getJSON(`${baseUrl}Api/Job/RunDetail/${jobId}`, function(res) {
+$.getJSON(`${common.baseUrl}api/Job/RunDetail/${jobId}`, function(res) {
 	if (res.Code === 200) {
-		console.log('res', res)
+		// console.log('res', res)
 		// 中间 现场打卡识别情况 图表
 		middleChart(res.Data.ClockData)
 		// 左下 本月历史率 图表
@@ -87,7 +87,7 @@ function middleChart(mdata) {
 			}
 		}]
 	};
-	console.log('showMiddle', option)
+	// console.log('showMiddle', option)
 	if (option && typeof option === 'object') {
 		myChart.setOption(option);
 	}
@@ -127,7 +127,7 @@ function leftBottomChart(mdata) {
 			}
 		}]
 	};
-	console.log('showLeftBottom', option)
+	// console.log('showLeftBottom', option)
 	if (option && typeof option === 'object') {
 		myChart.setOption(option);
 	}
@@ -143,8 +143,8 @@ function clockOkList(mdata) {
 
 function exceptionList(mdata) {
 	let html = '';
-	if(!mdata || !mdata instanceof Array || mdata.length == 0){
-		html+='<p>暂无告警信息</p>';
+	if (!mdata || !mdata instanceof Array || mdata.length == 0) {
+		html += '<p>暂无告警信息</p>';
 		document.getElementsByClassName('warn-content')[0].innerHTML = html;
 		return
 	}
