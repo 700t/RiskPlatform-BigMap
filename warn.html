@@ -38,6 +38,7 @@
 			</div>-->
 		</div>
 	</body>
+	<script src="assets/common.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 		// 调用示例
 		$("body").on("click", ".col-xs-4 img", function(e) {
@@ -60,7 +61,7 @@
 			console.log(errortime)
 //			return
 //			$.getJSON(`https://dltfaceui.700t.com/api/ClockreRord/Get_ClockFalisList_Details?workid=${id}&errortime=${errortime}`, function(res){
-			$.getJSON(`https://dltfaceui.700t.com/api/ClockreRord/Get_ClockFalisList_Details?workid=${id}&errortime=${errortime}`, function(res){
+			$.getJSON(`${common.baseUrl}api/ClockreRord/Get_ClockFalisList_Details?workid=${id}&errortime=${errortime}`, function(res){
 				if(res.Code === 0){
 					let html = '';
 					$.each(res.Data, function(i, item){

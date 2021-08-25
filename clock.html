@@ -38,6 +38,7 @@
 			</div>-->
 		</div>
 	</body>
+	<script src="assets/common.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 		// 调用示例
 		$("body").on("click", ".col-xs-4 img", function(e) {
@@ -52,7 +53,7 @@
 
 		window.onload = function() {
 			let id = getQueryVariable('id');
-			$.getJSON(`https://dltfaceui.700t.com/api/ClockreRord/Get_WebClockreRordList_Statistics?WorkId=${id}`,
+			$.getJSON(`${common.baseUrl}api/ClockreRord/Get_WebClockreRordList_Statistics?WorkId=${id}`,
 				function(res) {
 					if (res.Code === 0) {
 						let html = '';

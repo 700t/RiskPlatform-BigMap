@@ -1,349 +1,393 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>展现专题</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon">
-    <style>
-      html, body, #map {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-      }
-      .project-view{
-      	position: fixed;
-      	top:30px;
-    	right:5px;
-      	height: 200px;
-      	width: 200px;
-      	background-color: #007AFF;
-      	z-index: 999;
-      	opacity:0.5;/*Firefox、Chorme、Opera等主流浏览器识别*/
-　　		filter:alpha(opacity=50);/*IE6及以上IE浏览器识别*/
-      }
-      
-    </style>
+	<head>
+		<title>展现专题</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="shortcut icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon">
+		<style>
+			html,
+			body,
+			#map {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+			}
 
-    <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-	
-	
-	<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	<script type="text/javascript"  src="https://unpkg.com/leaflet.vectorgrid@1.2.0"></script>
+			.project-view {
+				position: fixed;
+				top: 30px;
+				right: 5px;
+				height: 200px;
+				width: 200px;
+				background-color: #007AFF;
+				z-index: 999;
+				opacity: 0.5;
+				/*Firefox、Chorme、Opera等主流浏览器识别*/
+				filter: alpha(opacity=50);
+				/*IE6及以上IE浏览器识别*/
+			}
+		</style>
 
-    <!-- Mapbox GL -->
-    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.css" rel='stylesheet' />
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
-    <!--Bootstrap 3-->
-    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<style>
-	  .box{
-      	position:fixed;
-      	width: 320px;
-      	z-index: 999;
-      	border-color: #B8BBBF;
-      	margin: 0;
-      	opacity:0.85;/*Firefox、Chorme、Opera等主流浏览器识别*/
-　　		filter:alpha(opacity=85);/*IE6及以上IE浏览器识别*/
-      }
-	  .project-box{
-      	top: 100px;
-      	right: 20px;
-      }
-      .task-box{
-      	top: 70px;
-      	left: 20px;
-      }
+		<!-- Leaflet -->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+		<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-      .operation-box{
-      	top: 220px;
-      	left: 20px;
-      }
-      .risk-box{
-      	top: 570px;
-      	left: 20px;
-      }
-      .person-box{
-      	top: 350px;
-      	right: 20px;
-      }
-      .tips-box{
-      	top: 70px;
-      	right: 20px;
-      }
-      .panel-primary>.panel-heading{
-      	/*background-color: #666E70;*/
-      	background-color: #116156;
-      	border-color: #666E70;
-      }
-      .panel-primary>.panel-body{
-      	background-color: #E8E8E8;
-      	/*color: #2C7268;*/
-      	color: #116156;
-      	font-weight: 600;
-      	align-items: center;
-      }
-      .high-risk-count{
-      	color: darkorange;
-      	font-weight: 600;
-      }
-     .task-count, .high-risk-count{
-     	display: inline-block;
-      	text-align: center;
-      	margin: 0 10px;
-     }
-     .not-start, .in-progress, .finish{
-     	display: inline-block;
-      	text-align: center;
-      	margin: 0 15px;
-     }
-     .work-container{
-     	margin: 0 15px;
-     }
-     .work-container>div{
-     	display: flex;
-		justify-content: space-between;
-		align-items: center;
-     }
-     .risk-box h4{
-     	margin: 0;
-     }
-     .risk-title{
-     	margin: 0 15px;
-     	display: flex;
-     	justify-content: space-between;
-     	align-items: center;
-     }
-     .risk-content{
-     	margin: 0 25px;
-     	display: flex;
-     	justify-content: space-between;
-     	align-items: center;
-     }
-     .risk-container{
-     	margin: 0 25px;
-     	display: flex;
-     	justify-content: space-between;
-     	align-items: center;
-     }
-     .risk-one{
-     	color: #00BFBF;
-     }
-     .risk-two{
-     	color: #BFBF00;
-     }
-     .risk-three{
-     	color: #F6A233;
-     }
-     .risk-four{
-     	color: #A30014;
-     }
-     #test{
-     	height: 500px;
-     }
-     .glyphicon-map-marker{
-     	color: #116156;
-     }
-     .person-info{
-     	margin: 0 20px;
-     	display: flex;
-     	justify-content: space-between;
-     	align-items: center;
-     }
-     .leaflet-popup-content {
-	    /* margin: 13px 19px; */
-	    margin: 0;
-	    line-height: 1.4;
-     }
-     ul{
-     	padding: 0 0;
-     }
-     li{
-     	list-style: none;
-     	color: #000;
-     	font-size: 14px;
-     	white-space:nowrap;/*不换行*/
-		overflow:hidden;/**/
-		text-overflow:ellipsis;/*超长显示为省略号*/
-     }
-     .execute-status{
-     	padding: 3px 3px;
-     	background-color:#116156;
-     	color:#fff;
-     	border-radius: 3px;
-     	font-size: 12px;
-     }
-     a{
-     	color:#116156;
-     	text-decoration:none;
-     	font-size:14px;
-     }
-     .tips-box ul{
-     	line-height: 30px;
-     	height: 150px;
-      	overflow-y: auto;
-     }
-     .tips-box li{
-     	color: orange;
-     }
-     .tips-box img{
-     	width: 20px;
-     	height: 20px;
-     }
-     .panel-default{
-     	border-radius: 12px;
-     }
-	</style>
-</head>
 
-<body>
-<div id="map"></div>
-<!--作业总览-->
-<div class="panel panel-primary box task-box">
-	<div class="panel-heading"><span class="glyphicon glyphicon-leaf">&ensp;</span>作业总览</div>
-	<div class="panel-body">
-		<div class="task-count">
-			<h4 id="today-total">0</h4>
-			<h4>今日作业总数</h4>
+		<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script type="text/javascript" src="https://unpkg.com/leaflet.vectorgrid@1.2.0"></script>
+
+		<!-- Mapbox GL -->
+		<link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.css" rel='stylesheet' />
+		<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+		<!--Bootstrap 3-->
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<style>
+			.box {
+				position: fixed;
+				width: 320px;
+				z-index: 999;
+				border-color: #B8BBBF;
+				margin: 0;
+				opacity: 0.85;
+				/*Firefox、Chorme、Opera等主流浏览器识别*/
+				filter: alpha(opacity=85);
+				/*IE6及以上IE浏览器识别*/
+			}
+
+			.project-box {
+				top: 100px;
+				right: 20px;
+			}
+
+			.task-box {
+				top: 70px;
+				left: 20px;
+			}
+
+			.operation-box {
+				top: 220px;
+				left: 20px;
+			}
+
+			.risk-box {
+				top: 570px;
+				left: 20px;
+			}
+
+			.person-box {
+				top: 350px;
+				right: 20px;
+			}
+
+			.tips-box {
+				top: 70px;
+				right: 20px;
+			}
+
+			.panel-primary>.panel-heading {
+				/*background-color: #666E70;*/
+				background-color: #116156;
+				border-color: #666E70;
+			}
+
+			.panel-primary>.panel-body {
+				background-color: #E8E8E8;
+				/*color: #2C7268;*/
+				color: #116156;
+				font-weight: 600;
+				align-items: center;
+			}
+
+			.high-risk-count {
+				color: darkorange;
+				font-weight: 600;
+			}
+
+			.task-count,
+			.high-risk-count {
+				display: inline-block;
+				text-align: center;
+				margin: 0 10px;
+			}
+
+			.not-start,
+			.in-progress,
+			.finish {
+				display: inline-block;
+				text-align: center;
+				margin: 0 15px;
+			}
+
+			.work-container {
+				margin: 0 15px;
+			}
+
+			.work-container>div {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.risk-box h4 {
+				margin: 0;
+			}
+
+			.risk-title {
+				margin: 0 15px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.risk-content {
+				margin: 0 25px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.risk-container {
+				margin: 0 25px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.risk-one {
+				color: #00BFBF;
+			}
+
+			.risk-two {
+				color: #BFBF00;
+			}
+
+			.risk-three {
+				color: #F6A233;
+			}
+
+			.risk-four {
+				color: #A30014;
+			}
+
+			#test {
+				height: 500px;
+			}
+
+			.glyphicon-map-marker {
+				color: #116156;
+			}
+
+			.person-info {
+				margin: 0 20px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.leaflet-popup-content {
+				/* margin: 13px 19px; */
+				margin: 0;
+				line-height: 1.4;
+			}
+
+			ul {
+				padding: 0 0;
+			}
+
+			li {
+				list-style: none;
+				color: #000;
+				font-size: 14px;
+				white-space: nowrap;
+				/*不换行*/
+				overflow: hidden;
+				/**/
+				text-overflow: ellipsis;
+				/*超长显示为省略号*/
+			}
+
+			.execute-status {
+				padding: 3px 3px;
+				background-color: #116156;
+				color: #fff;
+				border-radius: 3px;
+				font-size: 12px;
+			}
+
+			a {
+				color: #116156;
+				text-decoration: none;
+				font-size: 14px;
+			}
+
+			.tips-box ul {
+				line-height: 30px;
+				height: 150px;
+				overflow-y: auto;
+			}
+
+			.tips-box li {
+				color: orange;
+			}
+
+			.tips-box img {
+				width: 20px;
+				height: 20px;
+			}
+
+			.panel-default {
+				border-radius: 12px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="map"></div>
+		<!--作业总览-->
+		<div class="panel panel-primary box task-box">
+			<div class="panel-heading"><span class="glyphicon glyphicon-leaf">&ensp;</span>作业总览</div>
+			<div class="panel-body">
+				<div class="task-count">
+					<h4 id="today-total">0</h4>
+					<h4>今日作业总数</h4>
+				</div>
+				<div class="high-risk-count">
+					<h4 id="high-risk-total">0</h4>
+					<h4>高风险作业总数</h4>
+				</div>
+			</div>
 		</div>
-		<div class="high-risk-count">
-			<h4 id="high-risk-total">0</h4>
-			<h4>高风险作业总数</h4>
-		</div>
-	</div>
-</div>
-<!--开工统计-->
-<div class="panel panel-primary box operation-box">
-	<div class="panel-heading"><span class="glyphicon glyphicon-send">&ensp;</span>开工情况</div>
-	<div class="panel-body">
-		<div class="not-start">
-			<h4 id="job-nostart">0</h4>
-			<h4>未开工</h4>
-		</div>
-		<div class="in-progress">
-			<h4 id="job-executing">0</h4>
-			<h4>进行中</h4>
-		</div>
-		<div class="finish">
-			<h4 id="job-success">0</h4>
-			<h4>已完工</h4>
-		</div>
-		<div class="work-container">
-			<div class="ji-jian">
-				<span>基建工程</span>
-				<span id="jijiangongcheng">0</span>
-			</div>
-			<div class="pei-wang">
-				<span>配网工程</span>
-				<span id="peiwanggongcheng">0</span>
-			</div>
-			<div class="nong-wang">
-				<span>农网工程</span>
-				<spa id="nongwanggongcheng">0</spa>
-			</div>
-			<div class="xiao-xin">
-				<span>小型基建</span>
-				<span id="xiaoxingjijian">0</span>
-			</div>
-			<div class="sheng-chan">
-				<span>生产性大修技改</span>
-				<span id="shengchanxingjigai">0</span>
-			</div>
-			<div class="fei-sheng-chan">
-				<span>非生产性大修技改</span>
-				<span id="feishengchanxingjigai">0</span>
-			</div>
-			<div class="yun-wei">
-				<span>运维检修</span>
-				<span id="yunweijianxiu">0</span>
-			</div>
-			<div class="ying-xiao">
-				<span>营销作业</span>
-				<span id="yingxiaozuoye">0</span>
-			</div>
-			<div class="tong-xin">
-				<span>通信作业</span>
-				<span id="tongxinzuoye">0</span>
-			</div>
-			<div class="xin-xi">
-				<span>信息作业</span>
-				<span id="xinxizuoye">0</span>
+		<!--开工统计-->
+		<div class="panel panel-primary box operation-box">
+			<div class="panel-heading"><span class="glyphicon glyphicon-send">&ensp;</span>开工情况</div>
+			<div class="panel-body">
+				<div class="not-start">
+					<h4 id="job-nostart">0</h4>
+					<h4>未开工</h4>
+				</div>
+				<div class="in-progress">
+					<h4 id="job-executing">0</h4>
+					<h4>进行中</h4>
+				</div>
+				<div class="finish">
+					<h4 id="job-success">0</h4>
+					<h4>已完工</h4>
+				</div>
+				<div class="work-container">
+					<div class="ji-jian">
+						<span>基建工程</span>
+						<span id="jijiangongcheng">0</span>
+					</div>
+					<div class="pei-wang">
+						<span>配网工程</span>
+						<span id="peiwanggongcheng">0</span>
+					</div>
+					<div class="nong-wang">
+						<span>农网工程</span>
+						<spa id="nongwanggongcheng">0</spa>
+					</div>
+					<div class="xiao-xin">
+						<span>小型基建</span>
+						<span id="xiaoxingjijian">0</span>
+					</div>
+					<div class="sheng-chan">
+						<span>生产性大修技改</span>
+						<span id="shengchanxingjigai">0</span>
+					</div>
+					<div class="fei-sheng-chan">
+						<span>非生产性大修技改</span>
+						<span id="feishengchanxingjigai">0</span>
+					</div>
+					<div class="yun-wei">
+						<span>运维检修</span>
+						<span id="yunweijianxiu">0</span>
+					</div>
+					<div class="ying-xiao">
+						<span>营销作业</span>
+						<span id="yingxiaozuoye">0</span>
+					</div>
+					<div class="tong-xin">
+						<span>通信作业</span>
+						<span id="tongxinzuoye">0</span>
+					</div>
+					<div class="xin-xi">
+						<span>信息作业</span>
+						<span id="xinxizuoye">0</span>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-</div>
-<!--风险总览-->
-<div class="panel panel-primary box risk-box">
-	<div class="panel-heading"><span class="glyphicon glyphicon-exclamation-sign">&ensp;</span>风险总览</div>
-	<div class="panel-body">
-		<h4>电网运行风险</h4>
-		<div class="risk-container">
-			<div class="risk risk-one">
-				<p>8-7级</p>
-				<p id="power-8-7">0</p>
-			</div>
-			<div class="risk risk-two">
-				<p>6级</p>
-				<p id="power-6">0</p>
-			</div>
-			<div class="risk risk-three">
-				<p>5级</p>
-				<p id="power-5">0</p>
-			</div>
-			<div class="risk risk-four">
-				<p>4-1级</p>
-				<p id="power-4-1">0</p>
+		<!--风险总览-->
+		<div class="panel panel-primary box risk-box">
+			<div class="panel-heading"><span class="glyphicon glyphicon-exclamation-sign">&ensp;</span>风险总览</div>
+			<div class="panel-body">
+				<h4>电网运行风险</h4>
+				<div class="risk-container">
+					<div class="risk risk-one">
+						<p>8-7级</p>
+						<p id="power-8-7">0</p>
+					</div>
+					<div class="risk risk-two">
+						<p>6级</p>
+						<p id="power-6">0</p>
+					</div>
+					<div class="risk risk-three">
+						<p>5级</p>
+						<p id="power-5">0</p>
+					</div>
+					<div class="risk risk-four">
+						<p>4-1级</p>
+						<p id="power-4-1">0</p>
+					</div>
+				</div>
+				<h4>运检作业风险</h4>
+				<div class="risk-container">
+					<div class="risk risk-one">
+						<p>1-2级</p>
+						<p id="run-1-2">0</p>
+					</div>
+					<div class="risk risk-two">
+						<p>3级</p>
+						<p id="run-3">0</p>
+					</div>
+					<div class="risk risk-three">
+						<p>4级</p>
+						<p id="run-4">0</p>
+					</div>
+					<div class="risk risk-four">
+						<p>5级</p>
+						<p id="run-5">0</p>
+					</div>
+				</div>
+				<h4>基建施工风险</h4>
+				<div class="risk-container">
+					<div class="risk risk-one">
+						<p>1-2级</p>
+						<p id="base-1-2">0</p>
+					</div>
+					<div class="risk risk-two">
+						<p>3级</p>
+						<p id="base-3">0</p>
+					</div>
+					<div class="risk risk-three">
+						<p>4级</p>
+						<p id="base-4">0</p>
+					</div>
+					<div class="risk risk-four">
+						<p>5级</p>
+						<p id="base-5">0</p>
+					</div>
+				</div>
 			</div>
 		</div>
-		<h4>运检作业风险</h4>
-		<div class="risk-container">
-			<div class="risk risk-one">
-				<p>1-2级</p>
-				<p id="run-1-2">0</p>
-			</div>
-			<div class="risk risk-two">
-				<p>3级</p>
-				<p id="run-3">0</p>
-			</div>
-			<div class="risk risk-three">
-				<p>4级</p>
-				<p id="run-4">0</p>
-			</div>
-			<div class="risk risk-four">
-				<p>5级</p>
-				<p id="run-5">0</p>
-			</div>
-		</div>
-		<h4>基建施工风险</h4>
-		<div class="risk-container">
-			<div class="risk risk-one">
-				<p>1-2级</p>
-				<p id="base-1-2">0</p>
-			</div>
-			<div class="risk risk-two">
-				<p>3级</p>
-				<p id="base-3">0</p>
-			</div>
-			<div class="risk risk-three">
-				<p>4级</p>
-				<p id="base-4">0</p>
-			</div>
-			<div class="risk risk-four">
-				<p>5级</p>
-				<p id="base-5">0</p>
-			</div>
-		</div>
-	</div>
-</div>
-<!--异常告警-->
-<div class="panel panel-primary box tips-box">
-	<div class="panel-heading"><span class="glyphicon glyphicon-tasks">&ensp;</span>异常通知</div>
-	<div class="panel-body">
-		<ul>
-		  <!--<li><img src="warn2.png"/><span>2021-06-07 10:45:29</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(1)">详情</a></li>
+		<!--异常告警-->
+		<div class="panel panel-primary box tips-box">
+			<div class="panel-heading"><span class="glyphicon glyphicon-tasks">&ensp;</span>异常通知</div>
+			<div class="panel-body">
+				<ul>
+					<!--<li><img src="warn2.png"/><span>2021-06-07 10:45:29</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(1)">详情</a></li>
 		  <li><img src="warn2.png"/><span>2021-06-07 10:08:23</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(2)">详情</a></li>
 		  <li><img src="warn2.png"/><span>2021-06-07 10:08:23</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(3)">详情</a></li>
 		  <li><img src="warn2.png"/><span>2021-06-07 10:08:23</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(9)">详情</a></li>
@@ -351,12 +395,12 @@
 		  <li><img src="warn2.png"/><span>2021-06-07 10:08:23</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(11)">详情</a></li>
 		  <li><img src="warn2.png"/><span>2021-06-07 10:08:23</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(12)">详情</a></li>
 		  <li><img src="warn2.png"/><span>2021-06-07 10:08:23</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(13)">详情</a></li>-->
-		</ul>
-	</div>
-</div>
+				</ul>
+			</div>
+		</div>
 
-<!--项目总览-->
-<!--<div class="panel panel-primary box project-box">
+		<!--项目总览-->
+		<!--<div class="panel panel-primary box project-box">
 	<div class="panel-heading"><span class="glyphicon glyphicon-tasks">&ensp;</span>项目总览</div>
 	<div class="panel-body">
 		<p>机场大道10kV化熊东西线13#-60#杆电力线路迁改工程</p>
@@ -365,8 +409,8 @@
 		<p>110kV官太线N1-N20段技改工程</p>
 	</div>
 </div>-->
-<!--现场作业人员-->
-<!--<div class="panel panel-primary box person-box">
+		<!--现场作业人员-->
+		<!--<div class="panel panel-primary box person-box">
 	<div class="panel-heading"><span class="glyphicon glyphicon-tasks">&ensp;</span>现场工作人员准入情况</div>
 	<div class="panel-body">
 		<div class="person-info">
@@ -392,590 +436,653 @@
 	</div>
 </div>-->
 
-<!--<iframe src="warn.html" name="warnframe" style="display:none"></iframe>-->
+		<!--<iframe src="warn.html" name="warnframe" style="display:none"></iframe>-->
 
-<div id="test"></div>
-<script src="./leaflet-mapbox-gl.js"></script>
-<script type="text/javascript" src="eu-countries.js"></script>
-<script src="https://unpkg.com/gcoord@0.3.2/dist/gcoord.js"></script>
-<script src="https://cdn.bootcdn.net/ajax/libs/layer/3.4.0/layer.min.js"></script>
-<!-- <script type="text/javascript" src="assets/gps.js" ></script>
+		<div id="test"></div>
+		<script src="./leaflet-mapbox-gl.js"></script>
+		<script type="text/javascript" src="eu-countries.js"></script>
+		<script src="https://unpkg.com/gcoord@0.3.2/dist/gcoord.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/layer/3.4.0/layer.min.js"></script>
+		<script src="assets/common.js" type="text/javascript" charset="utf-8"></script>
+		<!-- <script type="text/javascript" src="assets/gps.js" ></script>
 <script src="assets/poi-kcode.js" type="text/javascript" charset="utf-8"></script> -->
-<script>
+		<script>
+			var map = L.map('map', {
+				rotate: true,
+				touchRotate: true,
+				attributionControl: false
+			});
+			var vectorTileStyling = {
+				water: {
+					fill: true,
+					weight: 1,
+					fillColor: '#06cccc',
+					color: '#06cccc',
+					fillOpacity: 0.2,
+					opacity: 0.4,
+				},
+				admin: {
+					weight: 1,
+					fillColor: 'pink',
+					color: 'pink',
+					fillOpacity: 0.2,
+					opacity: 0.4
+				},
+				waterway: {
+					weight: 1,
+					fillColor: '#2375e0',
+					color: '#2375e0',
+					fillOpacity: 0.2,
+					opacity: 0.4
+				},
+				landcover: {
+					fill: true,
+					weight: 1,
+					fillColor: '#53e033',
+					color: '#53e033',
+					fillOpacity: 0.2,
+					opacity: 0.4,
+				},
+				landuse: {
+					fill: true,
+					weight: 1,
+					fillColor: '#e5b404',
+					color: '#e5b404',
+					fillOpacity: 0.2,
+					opacity: 0.4
+				},
+				park: {
+					fill: true,
+					weight: 1,
+					fillColor: '#84ea5b',
+					color: '#84ea5b',
+					fillOpacity: 0.2,
+					opacity: 0.4
+				},
+				boundary: {
+					weight: 1,
+					fillColor: '#c545d3',
+					color: '#c545d3',
+					fillOpacity: 0.2,
+					opacity: 0.4
+				},
+				aeroway: {
+					weight: 1,
+					fillColor: '#51aeb5',
+					color: '#51aeb5',
+					fillOpacity: 0.2,
+					opacity: 0.4
+				},
+				road: { // mapbox & nextzen only
+					weight: 1,
+					fillColor: '#f2b648',
+					color: '#f2b648',
+					fillOpacity: 0.2,
+					opacity: 0.4
+				},
+				tunnel: { // mapbox only
+					weight: 0.5,
+					fillColor: '#f2b648',
+					color: '#f2b648',
+					fillOpacity: 0.2,
+					opacity: 0.4,
+					// 					dashArray: [4, 4]
+				},
+				bridge: { // mapbox only
+					weight: 0.5,
+					fillColor: '#f2b648',
+					color: '#f2b648',
+					fillOpacity: 0.2,
+					opacity: 0.4,
+					// 					dashArray: [4, 4]
+				},
+				transportation: { // openmaptiles only
+					weight: 0.5,
+					fillColor: '#f2b648',
+					color: '#f2b648',
+					fillOpacity: 0.2,
+					opacity: 0.4,
+					// 					dashArray: [4, 4]
+				},
+				transit: { // nextzen only
+					weight: 0.5,
+					fillColor: '#f2b648',
+					color: '#f2b648',
+					fillOpacity: 0.2,
+					opacity: 0.4,
+					// 					dashArray: [4, 4]
+				},
+				building: {
+					fill: true,
+					weight: 1,
+					fillColor: '#2b2b2b',
+					color: '#2b2b2b',
+					fillOpacity: 0.2,
+					opacity: 0.4
+				},
+				water_name: {
+					weight: 1,
+					fillColor: '#022c5b',
+					color: '#022c5b',
+					fillOpacity: 0.2,
+					opacity: 0.4
+				},
+				transportation_name: {
+					weight: 1,
+					fillColor: '#bc6b38',
+					color: '#bc6b38',
+					fillOpacity: 0.2,
+					opacity: 0.4
+				},
+				place: {
+					weight: 1,
+					fillColor: '#f20e93',
+					color: '#f20e93',
+					fillOpacity: 0.2,
+					opacity: 0.4
+				},
+				housenumber: {
+					weight: 1,
+					fillColor: '#ef4c8b',
+					color: '#ef4c8b',
+					fillOpacity: 0.2,
+					opacity: 0.4
+				},
+				poi: {
+					weight: 1,
+					fillColor: '#3bb50a',
+					color: '#3bb50a',
+					fillOpacity: 0.2,
+					opacity: 0.4
+				},
+				earth: { // nextzen only
+					fill: true,
+					weight: 1,
+					fillColor: '#c0c0c0',
+					color: '#c0c0c0',
+					fillOpacity: 0.2,
+					opacity: 0.4
+				},
 
-	var map = L.map('map', {rotate:true,touchRotate:true,attributionControl:false});
-	var vectorTileStyling = {
-		water: {
-			fill: true,
-			weight: 1,
-			fillColor: '#06cccc',
-			color: '#06cccc',
-			fillOpacity: 0.2,
-			opacity: 0.4,
-		},
-		admin: {
-			weight: 1,
-			fillColor: 'pink',
-			color: 'pink',
-			fillOpacity: 0.2,
-			opacity: 0.4
-		},
-		waterway: {
-			weight: 1,
-			fillColor: '#2375e0',
-			color: '#2375e0',
-			fillOpacity: 0.2,
-			opacity: 0.4
-		},
-		landcover: {
-			fill: true,
-			weight: 1,
-			fillColor: '#53e033',
-			color: '#53e033',
-			fillOpacity: 0.2,
-			opacity: 0.4,
-		},
-		landuse: {
-			fill: true,
-			weight: 1,
-			fillColor: '#e5b404',
-			color: '#e5b404',
-			fillOpacity: 0.2,
-			opacity: 0.4
-		},
-		park: {
-			fill: true,
-			weight: 1,
-			fillColor: '#84ea5b',
-			color: '#84ea5b',
-			fillOpacity: 0.2,
-			opacity: 0.4
-		},
-		boundary: {
-			weight: 1,
-			fillColor: '#c545d3',
-			color: '#c545d3',
-			fillOpacity: 0.2,
-			opacity: 0.4
-		},
-		aeroway: {
-			weight: 1,
-			fillColor: '#51aeb5',
-			color: '#51aeb5',
-			fillOpacity: 0.2,
-			opacity: 0.4
-		},
-		road: {	// mapbox & nextzen only
-			weight: 1,
-			fillColor: '#f2b648',
-			color: '#f2b648',
-			fillOpacity: 0.2,
-			opacity: 0.4
-		},
-		tunnel: {	// mapbox only
-			weight: 0.5,
-			fillColor: '#f2b648',
-			color: '#f2b648',
-			fillOpacity: 0.2,
-			opacity: 0.4,
-// 					dashArray: [4, 4]
-		},
-		bridge: {	// mapbox only
-			weight: 0.5,
-			fillColor: '#f2b648',
-			color: '#f2b648',
-			fillOpacity: 0.2,
-			opacity: 0.4,
-// 					dashArray: [4, 4]
-		},
-		transportation: {	// openmaptiles only
-			weight: 0.5,
-			fillColor: '#f2b648',
-			color: '#f2b648',
-			fillOpacity: 0.2,
-			opacity: 0.4,
-// 					dashArray: [4, 4]
-		},
-		transit: {	// nextzen only
-			weight: 0.5,
-			fillColor: '#f2b648',
-			color: '#f2b648',
-			fillOpacity: 0.2,
-			opacity: 0.4,
-// 					dashArray: [4, 4]
-		},
-		building: {
-			fill: true,
-			weight: 1,
-			fillColor: '#2b2b2b',
-			color: '#2b2b2b',
-			fillOpacity: 0.2,
-			opacity: 0.4
-		},
-		water_name: {
-			weight: 1,
-			fillColor: '#022c5b',
-			color: '#022c5b',
-			fillOpacity: 0.2,
-			opacity: 0.4
-		},
-		transportation_name: {
-			weight: 1,
-			fillColor: '#bc6b38',
-			color: '#bc6b38',
-			fillOpacity: 0.2,
-			opacity: 0.4
-		},
-		place: {
-			weight: 1,
-			fillColor: '#f20e93',
-			color: '#f20e93',
-			fillOpacity: 0.2,
-			opacity: 0.4
-		},
-		housenumber: {
-			weight: 1,
-			fillColor: '#ef4c8b',
-			color: '#ef4c8b',
-			fillOpacity: 0.2,
-			opacity: 0.4
-		},
-		poi: {
-			weight: 1,
-			fillColor: '#3bb50a',
-			color: '#3bb50a',
-			fillOpacity: 0.2,
-			opacity: 0.4
-		},
-		earth: {	// nextzen only
-			fill: true,
-			weight: 1,
-			fillColor: '#c0c0c0',
-			color: '#c0c0c0',
-			fillOpacity: 0.2,
-			opacity: 0.4
-		},
+				// Do not symbolize some stuff for mapbox
+				country_label: [],
+				marine_label: [],
+				state_label: [],
+				place_label: [],
+				waterway_label: [],
+				poi_label: [],
+				road_label: [],
+				housenum_label: [],
 
-		// Do not symbolize some stuff for mapbox
-		country_label: [],
-		marine_label: [],
-		state_label: [],
-		place_label: [],
-		waterway_label: [],
-		poi_label: [],
-		road_label: [],
-		housenum_label: [],
+				// Do not symbolize some stuff for openmaptiles
+				country_name: [],
+				marine_name: [],
+				state_name: [],
+				place_name: [],
+				waterway_name: [],
+				poi_name: [],
+				road_name: [],
+				housenum_name: [],
+			};
 
-		// Do not symbolize some stuff for openmaptiles
-		country_name: [],
-		marine_name: [],
-		state_name: [],
-		place_name: [],
-		waterway_name: [],
-		poi_name: [],
-		road_name: [],
-		housenum_name: [],
-	};
+			// Monkey-patch some properties for nextzen layer names, because
+			// instead of "building" the data layer is called "buildings" and so on
+			vectorTileStyling.buildings = vectorTileStyling.building;
+			vectorTileStyling.boundaries = vectorTileStyling.boundary;
+			vectorTileStyling.places = vectorTileStyling.place;
+			vectorTileStyling.pois = vectorTileStyling.poi;
+			vectorTileStyling.roads = vectorTileStyling.road;
 
-	// Monkey-patch some properties for nextzen layer names, because
-	// instead of "building" the data layer is called "buildings" and so on
-	vectorTileStyling.buildings  = vectorTileStyling.building;
-	vectorTileStyling.boundaries = vectorTileStyling.boundary;
-	vectorTileStyling.places     = vectorTileStyling.place;
-	vectorTileStyling.pois       = vectorTileStyling.poi;
-	vectorTileStyling.roads      = vectorTileStyling.road;
+			//var mapboxUrl = "https://{s}.tiles.mapbox.com/v4/mapbox.mapbox-streets-v6/{z}/{x}/{y}.vector.pbf?access_token={token}";
+			//	var mapboxUrl = "http://192.168.86.29:9090/data/v3/{z}/{x}/{y}.pbf";
+			var mapboxUrl = "http://map1.700t.com/data/v3/{z}/{x}/{y}.pbf";
+			var mapboxVectorTileOptions = {
+				rendererFactory: L.canvas.tile,
+				vectorTileLayerStyles: vectorTileStyling,
+				// token: 'pk.eyJ1IjoiaXZhbnNhbmNoZXoiLCJhIjoiY2l6ZTJmd3FnMDA0dzMzbzFtaW10cXh2MSJ9.VsWCS9-EAX4_4W1K-nXnsA'
+			};
 
-	//var mapboxUrl = "https://{s}.tiles.mapbox.com/v4/mapbox.mapbox-streets-v6/{z}/{x}/{y}.vector.pbf?access_token={token}";
-//	var mapboxUrl = "http://192.168.86.29:9090/data/v3/{z}/{x}/{y}.pbf";
-	var mapboxUrl = "http://map1.700t.com/data/v3/{z}/{x}/{y}.pbf";
-	var mapboxVectorTileOptions = {
-		rendererFactory: L.canvas.tile,
-		vectorTileLayerStyles: vectorTileStyling,
-		// token: 'pk.eyJ1IjoiaXZhbnNhbmNoZXoiLCJhIjoiY2l6ZTJmd3FnMDA0dzMzbzFtaW10cXh2MSJ9.VsWCS9-EAX4_4W1K-nXnsA'
-	};
+			var mapboxPbfLayer = L.vectorGrid.protobuf(mapboxUrl, mapboxVectorTileOptions).addTo(map);
 
-	var mapboxPbfLayer = L.vectorGrid.protobuf(mapboxUrl, mapboxVectorTileOptions).addTo(map);
-	
-	//30.659714, 104.063466
-	// var leafletMap = 
-//	map.setView({ lat: 30.659714, lng: 104.063466 }, 16);
-map.setView({ lat: 31.18930843952816, lng: 107.50946044921876 }, 9);
-//
-//	L.vectorGrid.slicer(euCountries,{
-//	    rendererFactory: L.svg.tile
-//	}).addTo(map);	 
-//	//map    //leaflet地图对象
-//	//data   //数据源
+			//30.659714, 104.063466
+			// var leafletMap = 
+			//	map.setView({ lat: 30.659714, lng: 104.063466 }, 16);
+			map.setView({
+				lat: 31.18930843952816,
+				lng: 107.50946044921876
+			}, 9);
+			//
+			//	L.vectorGrid.slicer(euCountries,{
+			//	    rendererFactory: L.svg.tile
+			//	}).addTo(map);	 
+			//	//map    //leaflet地图对象
+			//	//data   //数据源
 
 
 
-	/*
-	L.marker([30.659714, 104.063466])
-	.bindPopup("Hello <b>Leaflet GL</b>!<br>Whoa, it works!")
-	.addTo(map)
-	.openPopup();
-	*/
-	
-	var gl = L.mapboxGL({
-//		style: 'http://192.168.86.29:9090/styles/basic-preview/style.json',
-		style: 'http://map1.700t.com/styles/basic-preview/style.json',
-		hash: true,
-		maxZoom: 36
-	}).addTo(map);
-	
-//	// 转换GeoJSON坐标
-//	var geojson0 = {
-//	  "type": "Point",
-//	  "coordinates": [123, 45]
-//	}
-//	gcoord.transform(geojson0, gcoord.GCJ02, gcoord.WGS84);
-//	console.log('geojson0.coordinates', geojson0.coordinates); // [122.99395597, 44.99804071]
-//	
-	var result = gcoord.transform(
-	  euCountries,    			  // 经纬度坐标
-	  gcoord.GCJ02,               // 当前坐标系
-	  gcoord.WGS84                 // 目标坐标系
-	);
-//	console.log('euCountries', euCountries);
-//	console.log('result', result);
-	
-	geojson = L.geoJson(euCountries).addTo(map);
+			/*
+			L.marker([30.659714, 104.063466])
+			.bindPopup("Hello <b>Leaflet GL</b>!<br>Whoa, it works!")
+			.addTo(map)
+			.openPopup();
+			*/
 
-	geojson.eachLayer(function (layer) {
-		layer.bindPopup(layer.feature.properties.name);
-	});
+			var gl = L.mapboxGL({
+				//		style: 'http://192.168.86.29:9090/styles/basic-preview/style.json',
+				style: 'http://map1.700t.com/styles/basic-preview/style.json',
+				hash: true,
+				maxZoom: 36
+			}).addTo(map);
 
-//var layer = L.vectorGrid.slicer(euCountries, { 
-//  vectorTileLayerStyles: {
-//      sliced: {
-//          radius: 1,
-//      }
-//  }
-//}).addTo(map);
-	
-	var scale = new mapboxgl.ScaleControl({
-		maxWidth: 300,
-		unit: 'metric'
-	});
-	
-	gl._glMap.addControl(scale, "bottom-left");
-    gl._glMap.addControl(new mapboxgl.NavigationControl());
-	
-	map.on('contextmenu',function(e){
-		map.on('drag',function(e1){
-			console.log(e1)		
-		});
-	});
-	
-	//监听鼠标点击事件，弹出经纬度
-	var first = null;
-	var second = null;
-	function onMapClick(e) {
-		// console.log(JSON.stringify(L.CRS.Earth));
-		// latlng {"lat":30.659815062751434,"lng":104.06296824088868}
-		// {"lat":30.65393408557001,"lng":104.05731071120803}
-		console.log("latlng [" + e.latlng.lat + ", " + e.latlng.lng + "]");
-	};
-	
-	map.on('click',onMapClick);
-	
-	var baseUrl = 'http://localhost:5000/';
-	// var baseUrl = 'https://dltfaceui.700t.com/';
+			//	// 转换GeoJSON坐标
+			//	var geojson0 = {
+			//	  "type": "Point",
+			//	  "coordinates": [123, 45]
+			//	}
+			//	gcoord.transform(geojson0, gcoord.GCJ02, gcoord.WGS84);
+			//	console.log('geojson0.coordinates', geojson0.coordinates); // [122.99395597, 44.99804071]
+			//	
+			var result = gcoord.transform(
+				euCountries, // 经纬度坐标
+				gcoord.GCJ02, // 当前坐标系
+				gcoord.WGS84 // 目标坐标系
+			);
+			//	console.log('euCountries', euCountries);
+			//	console.log('result', result);
 
-	$(document).ready(function(){
-		getTodayJobs();
-		workView();
-		jobView();
-		riskView();
-		setTimeout(getAttendFail,1000);
-//		$.get("good.svg.txt", function(result){
-//			var svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-//			svgElement.setAttribute('xmlns', "http://www.w3.org/2000/svg");
-//			svgElement.setAttribute('viewBox', "0 0 10000 10000");
-//			svgElement.innerHTML = result;
-//			// var svgElementBounds = [ [30.659891084850333, 104.0633202954738], [30.659801092317945, 104.06344095170138] ];
-//			var svgElementBounds = [ [30.659825423504568, 104.06306401173097],[30.65981850100033, 104.06307272650211] ];
-//			L.svgOverlay(svgElement, svgElementBounds).addTo(map);
-//		});
-	});
+			geojson = L.geoJson(euCountries).addTo(map);
 
-	
-//	 [30.659825423504568, 104.06306401173097],[30.65981850100033, 104.06307272650211]
-//[31.207985, 107.523372]
+			geojson.eachLayer(function(layer) {
+				layer.bindPopup(layer.feature.properties.name);
+			});
 
-// //获取日计划
-// function getTodayJobs(){
-// //	let html = '';
-// //	$.getJSON('https://dltfaceapi.700t.com/api/ScheduleExtend?Status=2', function(res){
-// //	$.getJSON('https://dltfaceui.700t.com/api/ScheduleExtend?RotateStatus=2,3&Page=1&Limit=100', function(res){
-// 	$.getJSON(baseUrl+'api/ScheduleExtend', function(res){
-// 		console.log(res)
-// 		if(res.Code != 200){
-// 			console.log('加载日计划出错');
-// 			return;
-// 		}
-// 		const data = res.Data;
-// 		$.each(data, function(i, item) {
-// 			var html = '<div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">作业信息&emsp;';
-// 			html+='<b class="execute-status">'+item.ExecuteStatus+'</b>&emsp;<b class="execute-status">'+item.RunCheckRank+'</b></h3>';
-// 			html+='</div><div class="panel-body"><ul style="display:block;line-height:30px;font-size:10px;">';
-// 			html+='<li title="'+item.ConstructCompany+'">作业单位：'+item.ConstructCompany+'</li>';
-// 			html+='<li title="'+item.ScheduleName+'">任务名称：'+item.ScheduleName+'</li>';
-// 			html+='<li title="'+item.WorkAddress+'">工作地点：'+item.WorkAddress+'</li>';
-// 			html+='<li>专业名称：'+item.TaskType+'</li>';
-// 			html+='<li>工作班组：'+item.WorkTeam+'</li>';
-// 			html+='<li>工作负责人：'+item.WorkDirector+'</li>';
-// 			html+='<li>企业用工人员数量：'+item.MainWorkerCount+'人</li>';
-// 			html+='<li>外来人员数量：'+item.ExternalWorkerCount+'人</li>';
-// 			html+='<li title="'+item.CountryUser+'">到岗到位人员：'+item.CountryUser+'</li>';
-// 			html+='<li title="'+item.PrecontrolMethod+'">预控措施：'+item.PrecontrolMethod+'</li>';
-// 			html+='<li></li></ul>';
-// 			html+='<a style="padding-right:30px;" href="javascript:showWorkFile('+item.Id+')"><b>过程资料管控 >></b></a>';
-// 			html+='<a href="javascript:showClockRecord('+item.Id+')"><b>打卡情况 >></b></a></div></div>'
-// //			let kcode = item.ManyGpsNumber.split(',')[0];
+			//var layer = L.vectorGrid.slicer(euCountries, { 
+			//  vectorTileLayerStyles: {
+			//      sliced: {
+			//          radius: 1,
+			//      }
+			//  }
+			//}).addTo(map);
 
-// 			let gps = item.GpsNumber.split(',');
-// 			console.log('GPS',gps, 'scheduleid',item.Id)
-// //			let gpsNumber = kcode2wgs(item.GpsNumber);	
-// //			let gps = gpsNumber.split(',');
-// //			console.log('gps:', gps, 'scheduleid',item.Id);
-// 			if(gps){
-// 				L.marker(gps).addTo(map)
-// 					.bindPopup(html)
-// 	//				.openPopup();
-// 			}
-// //			window.localStorage.setItem('TodayJob'+item.Id, JSON.stringify(item));
-// 		});
-// 		localStorage.setItem('todayJobs', JSON.stringify(data))
-// 	})
-// }
+			var scale = new mapboxgl.ScaleControl({
+				maxWidth: 300,
+				unit: 'metric'
+			});
 
-//获取日计划
-function getTodayJobs(){
-	$.getJSON(`${baseUrl}api/ScheduleExtend`, function(res){
-		console.log(res)
-		if(res.Code != 200){
-			console.log('加载日计划出错');
-			return;
-		}
-		const data = res.Data;
-		$.each(data, function(i, item) {
-			// var html = '<div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">作业信息&emsp;';
-			// html+='<b class="execute-status">'+item.ExecuteStatus+'</b>&emsp;<b class="execute-status">'+item.RunCheckRank+'</b></h3>';
-			// html+='</div><div class="panel-body"><ul style="display:block;line-height:30px;font-size:10px;">';
-			// html+='<li title="'+item.ConstructCompany+'">作业单位：'+item.ConstructCompany+'</li>';
-			// html+='<li title="'+item.ScheduleName+'">任务名称：'+item.ScheduleName+'</li>';
-			// html+='<li title="'+item.WorkAddress+'">工作地点：'+item.WorkAddress+'</li>';
-			// html+='<li>专业名称：'+item.TaskType+'</li>';
-			// html+='<li>工作班组：'+item.WorkTeam+'</li>';
-			// html+='<li>工作负责人：'+item.WorkDirector+'</li>';
-			// html+='<li>企业用工人员数量：'+item.MainWorkerCount+'人</li>';
-			// html+='<li>外来人员数量：'+item.ExternalWorkerCount+'人</li>';
-			// html+='<li title="'+item.CountryUser+'">到岗到位人员：'+item.CountryUser+'</li>';
-			// html+='<li title="'+item.PrecontrolMethod+'">预控措施：'+item.PrecontrolMethod+'</li>';
-			// html+='<li></li></ul>';
-			// html+='<a style="padding-right:30px;" href="javascript:showWorkFile('+item.Id+')"><b>过程资料管控 >></b></a>';
-			// html+='<a href="javascript:showClockRecord('+item.Id+')"><b>打卡情况 >></b></a></div></div>'
-			let gps = item.GpsNumber.split(',');
-			console.log('GPS',gps, 'scheduleid',item.Id)
-			if(gps){
-				L.marker(gps).addTo(map).on('click', function(){
-					showJobDetail(item.Id);
+			gl._glMap.addControl(scale, "bottom-left");
+			gl._glMap.addControl(new mapboxgl.NavigationControl());
+
+			map.on('contextmenu', function(e) {
+				map.on('drag', function(e1) {
+					console.log(e1)
+				});
+			});
+
+			//监听鼠标点击事件，弹出经纬度
+			var first = null;
+			var second = null;
+
+			function onMapClick(e) {
+				// console.log(JSON.stringify(L.CRS.Earth));
+				// latlng {"lat":30.659815062751434,"lng":104.06296824088868}
+				// {"lat":30.65393408557001,"lng":104.05731071120803}
+				console.log("latlng [" + e.latlng.lat + ", " + e.latlng.lng + "]");
+			};
+
+			map.on('click', onMapClick);
+
+			// var baseUrl = 'http://localhost:5000/';
+			// var baseUrl = 'https://dltfaceui.700t.com/';
+
+			$(document).ready(function() {
+				getTodayJobs();
+				workView();
+				jobView();
+				riskView();
+				// setTimeout(getAttendFail, 1000);
+				getAttendFail();
+
+				//		$.get("good.svg.txt", function(result){
+				//			var svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+				//			svgElement.setAttribute('xmlns', "http://www.w3.org/2000/svg");
+				//			svgElement.setAttribute('viewBox', "0 0 10000 10000");
+				//			svgElement.innerHTML = result;
+				//			// var svgElementBounds = [ [30.659891084850333, 104.0633202954738], [30.659801092317945, 104.06344095170138] ];
+				//			var svgElementBounds = [ [30.659825423504568, 104.06306401173097],[30.65981850100033, 104.06307272650211] ];
+				//			L.svgOverlay(svgElement, svgElementBounds).addTo(map);
+				//		});
+			});
+
+
+			//	 [30.659825423504568, 104.06306401173097],[30.65981850100033, 104.06307272650211]
+			//[31.207985, 107.523372]
+
+			// //获取日计划
+			// function getTodayJobs(){
+			// //	let html = '';
+			// //	$.getJSON('https://dltfaceapi.700t.com/api/ScheduleExtend?Status=2', function(res){
+			// //	$.getJSON('https://dltfaceui.700t.com/api/ScheduleExtend?RotateStatus=2,3&Page=1&Limit=100', function(res){
+			// 	$.getJSON(baseUrl+'api/ScheduleExtend', function(res){
+			// 		console.log(res)
+			// 		if(res.Code != 200){
+			// 			console.log('加载日计划出错');
+			// 			return;
+			// 		}
+			// 		const data = res.Data;
+			// 		$.each(data, function(i, item) {
+			// 			var html = '<div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">作业信息&emsp;';
+			// 			html+='<b class="execute-status">'+item.ExecuteStatus+'</b>&emsp;<b class="execute-status">'+item.RunCheckRank+'</b></h3>';
+			// 			html+='</div><div class="panel-body"><ul style="display:block;line-height:30px;font-size:10px;">';
+			// 			html+='<li title="'+item.ConstructCompany+'">作业单位：'+item.ConstructCompany+'</li>';
+			// 			html+='<li title="'+item.ScheduleName+'">任务名称：'+item.ScheduleName+'</li>';
+			// 			html+='<li title="'+item.WorkAddress+'">工作地点：'+item.WorkAddress+'</li>';
+			// 			html+='<li>专业名称：'+item.TaskType+'</li>';
+			// 			html+='<li>工作班组：'+item.WorkTeam+'</li>';
+			// 			html+='<li>工作负责人：'+item.WorkDirector+'</li>';
+			// 			html+='<li>企业用工人员数量：'+item.MainWorkerCount+'人</li>';
+			// 			html+='<li>外来人员数量：'+item.ExternalWorkerCount+'人</li>';
+			// 			html+='<li title="'+item.CountryUser+'">到岗到位人员：'+item.CountryUser+'</li>';
+			// 			html+='<li title="'+item.PrecontrolMethod+'">预控措施：'+item.PrecontrolMethod+'</li>';
+			// 			html+='<li></li></ul>';
+			// 			html+='<a style="padding-right:30px;" href="javascript:showWorkFile('+item.Id+')"><b>过程资料管控 >></b></a>';
+			// 			html+='<a href="javascript:showClockRecord('+item.Id+')"><b>打卡情况 >></b></a></div></div>'
+			// //			let kcode = item.ManyGpsNumber.split(',')[0];
+
+			// 			let gps = item.GpsNumber.split(',');
+			// 			console.log('GPS',gps, 'scheduleid',item.Id)
+			// //			let gpsNumber = kcode2wgs(item.GpsNumber);	
+			// //			let gps = gpsNumber.split(',');
+			// //			console.log('gps:', gps, 'scheduleid',item.Id);
+			// 			if(gps){
+			// 				L.marker(gps).addTo(map)
+			// 					.bindPopup(html)
+			// 	//				.openPopup();
+			// 			}
+			// //			window.localStorage.setItem('TodayJob'+item.Id, JSON.stringify(item));
+			// 		});
+			// 		localStorage.setItem('todayJobs', JSON.stringify(data))
+			// 	})
+			// }
+
+			//获取日计划
+			function getTodayJobs() {
+				$.getJSON(`${common.baseUrl}api/ScheduleExtend`, function(res) {
+					// console.log(res)
+					if (res.Code != 200) {
+						console.log('加载日计划出错');
+						return;
+					}
+					const data = res.Data;
+					$.each(data, function(i, item) {
+						// var html = '<div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">作业信息&emsp;';
+						// html+='<b class="execute-status">'+item.ExecuteStatus+'</b>&emsp;<b class="execute-status">'+item.RunCheckRank+'</b></h3>';
+						// html+='</div><div class="panel-body"><ul style="display:block;line-height:30px;font-size:10px;">';
+						// html+='<li title="'+item.ConstructCompany+'">作业单位：'+item.ConstructCompany+'</li>';
+						// html+='<li title="'+item.ScheduleName+'">任务名称：'+item.ScheduleName+'</li>';
+						// html+='<li title="'+item.WorkAddress+'">工作地点：'+item.WorkAddress+'</li>';
+						// html+='<li>专业名称：'+item.TaskType+'</li>';
+						// html+='<li>工作班组：'+item.WorkTeam+'</li>';
+						// html+='<li>工作负责人：'+item.WorkDirector+'</li>';
+						// html+='<li>企业用工人员数量：'+item.MainWorkerCount+'人</li>';
+						// html+='<li>外来人员数量：'+item.ExternalWorkerCount+'人</li>';
+						// html+='<li title="'+item.CountryUser+'">到岗到位人员：'+item.CountryUser+'</li>';
+						// html+='<li title="'+item.PrecontrolMethod+'">预控措施：'+item.PrecontrolMethod+'</li>';
+						// html+='<li></li></ul>';
+						// html+='<a style="padding-right:30px;" href="javascript:showWorkFile('+item.Id+')"><b>过程资料管控 >></b></a>';
+						// html+='<a href="javascript:showClockRecord('+item.Id+')"><b>打卡情况 >></b></a></div></div>'
+						let gps = item.GpsNumber.split(',');
+						// console.log('GPS',gps, 'scheduleid',item.Id)
+						if (gps) {
+							// L.marker(gps).addTo(map)
+							// 	.bindPopup('<div style="margin:13px;"><b>任务名称：</b><br />'+item.ScheduleName+'</div>')
+							// // 	//.openPopup();
+							// L.marker(gps).addTo(map).on("mouseover", function (e) { 
+							// 	// alert('123123')
+							// 	this.openPopup();
+							// });
+							let marker = L.marker(gps).addTo(map);
+							marker.bindPopup('<div style="margin:13px;"><b>任务名称：</b><br />'+item.ScheduleName+'<br /><b><a href="JavaScript:showJobDetail('+item.Id+');">计划进行详情 >>></a></b></div>');
+							marker.on('mouseover', function (e) {
+							    this.openPopup();
+							});
+							// marker.on('mouseout', function (e) {
+							//     this.closePopup();
+							// });
+							
+							
+							// L.marker(gps).addTo(map).on('click', function() {
+							// 	showJobDetail(item.Id);
+							// })
+							// L.marker(gps).addTo(map).on('mouseover', function(e) {
+							//   //open popup;
+							//   var popup = L.popup()
+							//    .setLatLng(e.latlng) 
+							//    .setContent('<div style="margin:13px;"><b>任务名称：</b><br />'+item.ScheduleName+'</div>')
+							//    .bringToBack()
+							//    .openOn(map);
+							// });
+							
+							// L.marker(gps).addTo(map).on('mouseout', function(e) {
+							//   //close popup;
+							//   this.closePopup();
+							// });
+							// L.marker(gps).addTo(map).on('mouseover', function() {
+							// 	// alert(item.ScheduleName)
+							// 	this.openPopup();
+							// })
+
+							// L.marker.bindPopup("Popup content");
+							// L.marker.on('mouseover', function(e) {
+							// 	this.openPopup();
+							// });
+							// L.marker.on('mouseout', function(e) {
+							// 	this.closePopup();
+							// });
+						}
+					});
+					localStorage.setItem('todayJobs', JSON.stringify(data))
 				})
 			}
-		});
-		localStorage.setItem('todayJobs', JSON.stringify(data))
-	})
-}
-
-function showJobDetail(id){
-		//iframe层
-		layer.open({
-		  type: 2,
-		  title: '计划进行详情',
-		  shadeClose: true,
-		  shade: 0.4,
-		  area: ['1200px', '90%'],
-		  content: 'job_detail.html?id='+id //iframe的url
-		}); 
-	}
-	
-	function testClick(){
-		alert('弹出框')
-	}
-	
-	function workView(){
-		$.getJSON(`${baseUrl}api/Job/TodayJobTotal`, function(res){
-//			console.log(res)
-			if(res.Code===200){
-				$('#today-total').text(res.Data.total);
-				$('#high-risk-total').text(res.Data.highRiskTotal);
-			}
-		})
-	}
-	
-	function jobView(){
-		$.getJSON(`${baseUrl}api/Job/JobStartTotal`, function(res){
-//			console.log(res)
-			if(res.Code===200){
-				let d = res.Data;
-				
-				$('#job-nostart').text(d.jobStart.NotStart);
-				$('#job-executing').text(d.jobStart.Executing);
-				$('#job-success').text(d.jobStart.Success);
-				
-				$.each(d.classifyTotal, function(i, item) {
-					if(item.TaskType === '基建工程'){
-						$('#jijiangongcheng').text(item.Count)
-					}else if(item.TaskType === '配网工程'){
-						$('#peiwanggongcheng').text(item.Count)
-					}else if(item.TaskType==='农网工程'){
-						$('#nongwanggongcheng').text(item.Count)
-					}else if(item.TaskType ==='小型基建'){
-						$('#xiaoxingjijian').text(item.Count)
-					}else if(item.TaskType ==='生产性大修技改'){
-						$('#shengchanxingjigai').text(item.Count)
-					}else if(item.TaskType === '非生产性大修技改'){
-						$('#feishengchanxingjigai').text(item.Count)
-					}else if(item.TaskType === '运维检修'){
-						$('#yunweijianxiu').text(item.Count)
-					}else if(item.TaskType === '营销作业'){
-						$('#yingxiaozuoye').text(item.Count)
-					}else if(item.TaskType ==='通信作业'){
-						$('#tongxinzuoye').text(item.Count)
-					}else if(item.TaskType === '信息作业'){
-						$('#xinxizuoye').text(item.Count)
-					}
-				});
-			}
-		})
-	}
-	
-	function riskView(){
-		$.getJSON(`${baseUrl}api/Job/RiskTotal`, function(res){
-//			console.log(res)
-			if(res.Code===200){
-				var d = res.Data;
-				$('#power-4-1').text(d.Power4_1)
-				$('#power-5').text(d.Power5)
-				$('#power-6').text(d.Power6)
-				$('#power-8-7').text(d.Power8_7)
-				$('#run-1-2').text(d.Run1_2)
-				$('#run-3').text(d.Run3)
-				$('#run-4').text(d.Run4)
-				$('#run-5').text(d.Run5)
-				$('#base-1-2').text(d.Base1_2)
-				$('#base-3').text(d.Base3)
-				$('#base-4').text(d.Base4)
-				$('#base-5').text(d.Base5)
-			}
-		})
-	}
-	
-	function showWorkFile(id){
-		//iframe层
-		layer.open({
-		  type: 2,
-		  title: '过程资料管控',
-		  shadeClose: true,
-		  shade: 0.8,
-		  area: ['700px', '90%'],
-		  content: 'work_file.html?id='+id //iframe的url
-		}); 
-	}
-	
-	function showClockRecord(id){
-		//iframe层
-		layer.open({
-		  type: 2,
-		  title: '打卡情况',
-		  shadeClose: true,
-		  shade: 0.8,
-		  area: ['700px', '90%'],
-		  content: 'clock.html?id='+id //iframe的url
-		}); 
-	}
-	
-	function showWarnFile(id, errortime){
-		//iframe层
-		layer.open({
-		  type: 2,
-		  title: '异常资料',
-		  shadeClose: true,
-		  shade: 0.8,
-		  area: ['700px', '90%'],
-//		  content: 'warn.html?id='+id //iframe的url
-		  content: `warn.html?id=${id}&errortime=${errortime}`
-		}); 
-	}
-	
-	// 定义circle_layer
-	let circle_layer = '';
-	
-	function showAbnormal(id, errortime){
-		if(circle_layer && circle_layer !== ''){
-			map.removeLayer(circle_layer)
-		}
-
-//	    var item = JSON.parse(localStorage.getItem('TodayJob'+id));
-		var todayJobs = JSON.parse(localStorage.getItem('todayJobs')) 
-		let currentJobs = todayJobs.filter(function(item){
-			return item.Id === id;
-		})
-		let item = currentJobs[0]
-		var html = '<div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">异常信息</b></h3></div><div class="panel-body">';
-			html+='<h3>连续三次人脸识别异常</h3>'
-			html+='<ul style="display:block;line-height:30px;font-size:10px;"><li>作业单位：'+item.ConstructCompany+'</li>';
-			html+='<li>任务名称：'+item.ScheduleName+'</li>';
-			html+='<li>工作地点：'+item.WorkAddress+'</li>';
-			html+='<li>专业名称：'+item.TaskType+'</li>';
-			html+='<li>工作班组：'+item.ScheduleName+'</li>';
-			html+='<li>工作负责人：'+item.WorkDirector+'</li>';
-			html+='<li>企业用工人员数量：5人</li>';
-			html+='<li>外来人员数量：10人</li>';
-			html+='<li>到岗到位人员：'+item.ScheduleName+'</li>';
-			html+='<li>预控措施：无</li><li></li></ul>';
-			html+='<a href="javascript:showWarnFile('+id+', '+errortime+')"><b>异常资料 >></b></a></div></div>';
-
-			let gps = item.GpsNumber.split(',');
-//			let gpsNumber = kcode2wgs(item.GpsNumber);		
-//			let gps = gpsNumber.split(',');
-		circle_layer = L.circle(gps, 10000, {
-			color: 'red',
-			fillColor: '#f03',
-			fillOpacity: 0.5
-		}).addTo(map).bindPopup(html);
-	}
-	
-	function getAttendFail(){
-//		console.error('请求异常打卡 ')
-//		$.getJSON('https://dltfaceui.700t.com/api/ClockreRord/Get_ClockFalisList', function(res){
-		$.getJSON(`${baseUrl}api/Clock/Fails`, function(res){
-			if(res.Code === 200){
-				let html = ''
-				$.each(res.Data, function(index, item) {
-//					console.log(item.ErrorTime)
-					var oldTime = (new Date(item.ErrorTime)).getTime(); //得到毫秒数
-//					console.log(oldTime)
-//					var newTime = new Date(oldTime); //就得到普通的时间了
-//					console.log(newTime)
-//					html += `<li><img src="warn2.png"/><span>${item.ErrorTime}</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(${item.WorkId},${errortime})">详情</a></li>`
-					html += '<li><img src="warn2.png"/><span>'+item.ErrorTime+'</span>项目打卡异常&ensp;<a href="javascript:showAbnormal('+item.WorkId+','+oldTime+')">详情</a></li>'
-				});
-				$('.tips-box ul').empty().append(html)
-			}
 			
-			setTimeout('getAttendFail()', 10000)
-//			getAttendFail()
-		})		
-	}
-	
-	function kcode2wgs(kcode){
-		let lat = DecodeLat(kcode);
-		let lon = DecodeLon(kcode);
-		let res = GPS.gcj_decrypt(lat, lon)
-		return res.lat+','+res.lon;
-	}
-</script>
-</body>
+			// $('.leaflet-marker-icon')
+
+			function showJobDetail(id) {
+				//iframe层
+				layer.open({
+					type: 2,
+					title: '计划进行详情',
+					shadeClose: true,
+					shade: 0.4,
+					area: ['1200px', '90%'],
+					content: 'job_detail.html?id=' + id //iframe的url
+				});
+			}
+
+			function testClick() {
+				alert('弹出框')
+			}
+
+			function workView() {
+				$.getJSON(`${common.baseUrl}api/Job/TodayJobTotal`, function(res) {
+					//			console.log(res)
+					if (res.Code === 200) {
+						$('#today-total').text(res.Data.total);
+						$('#high-risk-total').text(res.Data.highRiskTotal);
+					}
+				})
+			}
+
+			function jobView() {
+				$.getJSON(`${common.baseUrl}api/Job/JobStartTotal`, function(res) {
+					//			console.log(res)
+					if (res.Code === 200) {
+						let d = res.Data;
+
+						$('#job-nostart').text(d.jobStart.NotStart);
+						$('#job-executing').text(d.jobStart.Executing);
+						$('#job-success').text(d.jobStart.Success);
+
+						$.each(d.classifyTotal, function(i, item) {
+							if (item.TaskType === '基建工程') {
+								$('#jijiangongcheng').text(item.Count)
+							} else if (item.TaskType === '配网工程') {
+								$('#peiwanggongcheng').text(item.Count)
+							} else if (item.TaskType === '农网工程') {
+								$('#nongwanggongcheng').text(item.Count)
+							} else if (item.TaskType === '小型基建') {
+								$('#xiaoxingjijian').text(item.Count)
+							} else if (item.TaskType === '生产性大修技改') {
+								$('#shengchanxingjigai').text(item.Count)
+							} else if (item.TaskType === '非生产性大修技改') {
+								$('#feishengchanxingjigai').text(item.Count)
+							} else if (item.TaskType === '运维检修') {
+								$('#yunweijianxiu').text(item.Count)
+							} else if (item.TaskType === '营销作业') {
+								$('#yingxiaozuoye').text(item.Count)
+							} else if (item.TaskType === '通信作业') {
+								$('#tongxinzuoye').text(item.Count)
+							} else if (item.TaskType === '信息作业') {
+								$('#xinxizuoye').text(item.Count)
+							}
+						});
+					}
+				})
+			}
+
+			function riskView() {
+				$.getJSON(`${common.baseUrl}api/Job/RiskTotal`, function(res) {
+					//			console.log(res)
+					if (res.Code === 200) {
+						var d = res.Data;
+						$('#power-4-1').text(d.Power4_1)
+						$('#power-5').text(d.Power5)
+						$('#power-6').text(d.Power6)
+						$('#power-8-7').text(d.Power8_7)
+						$('#run-1-2').text(d.Run1_2)
+						$('#run-3').text(d.Run3)
+						$('#run-4').text(d.Run4)
+						$('#run-5').text(d.Run5)
+						$('#base-1-2').text(d.Base1_2)
+						$('#base-3').text(d.Base3)
+						$('#base-4').text(d.Base4)
+						$('#base-5').text(d.Base5)
+					}
+				})
+			}
+
+			function showWorkFile(id) {
+				//iframe层
+				layer.open({
+					type: 2,
+					title: '过程资料管控',
+					shadeClose: true,
+					shade: 0.8,
+					area: ['700px', '90%'],
+					content: 'work_file.html?id=' + id //iframe的url
+				});
+			}
+
+			function showClockRecord(id) {
+				//iframe层
+				layer.open({
+					type: 2,
+					title: '打卡情况',
+					shadeClose: true,
+					shade: 0.8,
+					area: ['700px', '90%'],
+					content: 'clock.html?id=' + id //iframe的url
+				});
+			}
+
+			function showWarnFile(id, errortime) {
+				//iframe层
+				layer.open({
+					type: 2,
+					title: '异常资料',
+					shadeClose: true,
+					shade: 0.8,
+					area: ['700px', '90%'],
+					//		  content: 'warn.html?id='+id //iframe的url
+					content: `warn.html?id=${id}&errortime=${errortime}`
+				});
+			}
+
+			// 定义circle_layer
+			let circle_layer = '';
+
+			function showAbnormal(id, errortime) {
+				if (circle_layer && circle_layer !== '') {
+					map.removeLayer(circle_layer)
+				}
+
+				//	    var item = JSON.parse(localStorage.getItem('TodayJob'+id));
+				var todayJobs = JSON.parse(localStorage.getItem('todayJobs'))
+				let currentJobs = todayJobs.filter(function(item) {
+					return item.Id === id;
+				})
+				let item = currentJobs[0]
+				var html =
+					'<div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">异常信息</b></h3></div><div class="panel-body">';
+				html += '<h3>连续三次人脸识别异常</h3>'
+				html += '<ul style="display:block;line-height:30px;font-size:10px;"><li>作业单位：' + item.ConstructCompany + '</li>';
+				html += '<li>任务名称：' + item.ScheduleName + '</li>';
+				html += '<li>工作地点：' + item.WorkAddress + '</li>';
+				html += '<li>专业名称：' + item.TaskType + '</li>';
+				html += '<li>工作班组：' + item.ScheduleName + '</li>';
+				html += '<li>工作负责人：' + item.WorkDirector + '</li>';
+				html += '<li>企业用工人员数量：5人</li>';
+				html += '<li>外来人员数量：10人</li>';
+				html += '<li>到岗到位人员：' + item.ScheduleName + '</li>';
+				html += '<li>预控措施：无</li><li></li></ul>';
+				html += '<a href="javascript:showWarnFile(' + id + ', ' + errortime + ')"><b>异常资料 >></b></a></div></div>';
+
+				let gps = item.GpsNumber.split(',');
+				//			let gpsNumber = kcode2wgs(item.GpsNumber);		
+				//			let gps = gpsNumber.split(',');
+				circle_layer = L.circle(gps, 10000, {
+					color: 'red',
+					fillColor: '#f03',
+					fillOpacity: 0.5
+				}).addTo(map).bindPopup(html);
+			}
+
+			function getAttendFail() {
+				//		console.error('请求异常打卡 ')
+				//		$.getJSON('https://dltfaceui.700t.com/api/ClockreRord/Get_ClockFalisList', function(res){
+				try {
+					$.getJSON(`${common.baseUrl}api/Clock/Fails`, function(res) {
+						if (res.Code === 200) {
+							if (res.Data instanceof Array && res.Data.length > 0) {
+								let html = ''
+								$.each(res.Data, function(index, item) {
+									//					console.log(item.ErrorTime)
+									var oldTime = (new Date(item.ErrorTime)).getTime(); //得到毫秒数
+									//					console.log(oldTime)
+									//					var newTime = new Date(oldTime); //就得到普通的时间了
+									//					console.log(newTime)
+									//					html += `<li><img src="warn2.png"/><span>${item.ErrorTime}</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(${item.WorkId},${errortime})">详情</a></li>`
+									html += '<li><img src="warn2.png"/><span>' + item.ErrorTime +
+										'</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(' + item.WorkId +
+										',' +
+										oldTime + ')">详情</a></li>'
+								});
+								$('.tips-box ul').empty().append(html)
+							}
+						}
+						setTimeout('getAttendFail()', 10000)
+					})
+				} catch (e) {
+					console.log(e)
+					getAttendFail()
+				}
+			}
+
+			function kcode2wgs(kcode) {
+				let lat = DecodeLat(kcode);
+				let lon = DecodeLon(kcode);
+				let res = GPS.gcj_decrypt(lat, lon)
+				return res.lat + ',' + res.lon;
+			}
+		</script>
+	</body>
 </html>

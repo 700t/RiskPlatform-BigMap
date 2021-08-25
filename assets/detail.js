@@ -24,7 +24,7 @@ if (job) {
 
 $.getJSON(`${common.baseUrl}api/Job/RunDetail/${jobId}`, function(res) {
 	if (res.Code === 200) {
-		// console.log('res', res)
+		console.log('res', res)
 		// 中间 现场打卡识别情况 图表
 		middleChart(res.Data.ClockData)
 		// 左下 本月历史率 图表
@@ -134,9 +134,9 @@ function leftBottomChart(mdata) {
 }
 
 function clockOkList(mdata) {
-	let html = '<tr><th>打卡时间</th><th>打卡人员</th><th>所属公司</th></tr>';
+	let html = '<tr><th>打卡时间</th><th>打卡人员</th><th>所属公司</th><th>其他</th></tr>';
 	mdata.forEach(function(item, i) {
-		html += `<tr><td>${item.Time}</td><td>${item.Name}</td><td>${item.Company}</td></tr>`;
+		html += `<tr><td>${item.Time}</td><td>${item.Name}</td><td>${item.Company}</td><td><a href="JavaScript:photoTip('${item.Photo}');">查看</a></td></tr>`;
 	})
 	document.getElementsByClassName('table')[0].innerHTML = html;
 }
