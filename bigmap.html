@@ -72,7 +72,7 @@
 			}
 
 			.risk-box {
-				top: 570px;
+				top: 710px;
 				left: 20px;
 			}
 
@@ -387,6 +387,7 @@
 			<div class="panel-heading"><span class="glyphicon glyphicon-tasks">&ensp;</span>异常通知</div>
 			<div class="panel-body">
 				<ul>
+					<li>暂无异常记录</li>
 					<!--<li><img src="warn2.png"/><span>2021-06-07 10:45:29</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(1)">详情</a></li>
 		  <li><img src="warn2.png"/><span>2021-06-07 10:08:23</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(2)">详情</a></li>
 		  <li><img src="warn2.png"/><span>2021-06-07 10:08:23</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(3)">详情</a></li>
@@ -435,17 +436,13 @@
 		</div>
 	</div>
 </div>-->
-
-		<!--<iframe src="warn.html" name="warnframe" style="display:none"></iframe>-->
-
 		<div id="test"></div>
 		<script src="./leaflet-mapbox-gl.js"></script>
 		<script type="text/javascript" src="eu-countries.js"></script>
 		<script src="https://unpkg.com/gcoord@0.3.2/dist/gcoord.js"></script>
 		<script src="https://cdn.bootcdn.net/ajax/libs/layer/3.4.0/layer.min.js"></script>
 		<script src="assets/common.js" type="text/javascript" charset="utf-8"></script>
-		<!-- <script type="text/javascript" src="assets/gps.js" ></script>
-<script src="assets/poi-kcode.js" type="text/javascript" charset="utf-8"></script> -->
+		<script src="assets/main.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			var map = L.map('map', {
 				rotate: true,
@@ -633,13 +630,11 @@
 			vectorTileStyling.pois = vectorTileStyling.poi;
 			vectorTileStyling.roads = vectorTileStyling.road;
 
-			//var mapboxUrl = "https://{s}.tiles.mapbox.com/v4/mapbox.mapbox-streets-v6/{z}/{x}/{y}.vector.pbf?access_token={token}";
 			//	var mapboxUrl = "http://192.168.86.29:9090/data/v3/{z}/{x}/{y}.pbf";
 			var mapboxUrl = "http://map1.700t.com/data/v3/{z}/{x}/{y}.pbf";
 			var mapboxVectorTileOptions = {
 				rendererFactory: L.canvas.tile,
-				vectorTileLayerStyles: vectorTileStyling,
-				// token: 'pk.eyJ1IjoiaXZhbnNhbmNoZXoiLCJhIjoiY2l6ZTJmd3FnMDA0dzMzbzFtaW10cXh2MSJ9.VsWCS9-EAX4_4W1K-nXnsA'
+				vectorTileLayerStyles: vectorTileStyling
 			};
 
 			var mapboxPbfLayer = L.vectorGrid.protobuf(mapboxUrl, mapboxVectorTileOptions).addTo(map);
@@ -657,8 +652,6 @@
 			//	}).addTo(map);	 
 			//	//map    //leaflet地图对象
 			//	//data   //数据源
-
-
 
 			/*
 			L.marker([30.659714, 104.063466])
@@ -731,26 +724,8 @@
 
 			map.on('click', onMapClick);
 
-			// var baseUrl = 'http://localhost:5000/';
-			// var baseUrl = 'https://dltfaceui.700t.com/';
-
 			$(document).ready(function() {
-				getTodayJobs();
-				workView();
-				jobView();
-				riskView();
-				// setTimeout(getAttendFail, 1000);
-				getAttendFail();
-
-				//		$.get("good.svg.txt", function(result){
-				//			var svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-				//			svgElement.setAttribute('xmlns', "http://www.w3.org/2000/svg");
-				//			svgElement.setAttribute('viewBox', "0 0 10000 10000");
-				//			svgElement.innerHTML = result;
-				//			// var svgElementBounds = [ [30.659891084850333, 104.0633202954738], [30.659801092317945, 104.06344095170138] ];
-				//			var svgElementBounds = [ [30.659825423504568, 104.06306401173097],[30.65981850100033, 104.06307272650211] ];
-				//			L.svgOverlay(svgElement, svgElementBounds).addTo(map);
-				//		});
+				main.mainMethod();
 			});
 
 
@@ -804,285 +779,284 @@
 			// 	})
 			// }
 
-			//获取日计划
-			function getTodayJobs() {
-				$.getJSON(`${common.baseUrl}api/ScheduleExtend`, function(res) {
-					// console.log(res)
-					if (res.Code != 200) {
-						console.log('加载日计划出错');
-						return;
-					}
-					const data = res.Data;
-					$.each(data, function(i, item) {
-						// var html = '<div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">作业信息&emsp;';
-						// html+='<b class="execute-status">'+item.ExecuteStatus+'</b>&emsp;<b class="execute-status">'+item.RunCheckRank+'</b></h3>';
-						// html+='</div><div class="panel-body"><ul style="display:block;line-height:30px;font-size:10px;">';
-						// html+='<li title="'+item.ConstructCompany+'">作业单位：'+item.ConstructCompany+'</li>';
-						// html+='<li title="'+item.ScheduleName+'">任务名称：'+item.ScheduleName+'</li>';
-						// html+='<li title="'+item.WorkAddress+'">工作地点：'+item.WorkAddress+'</li>';
-						// html+='<li>专业名称：'+item.TaskType+'</li>';
-						// html+='<li>工作班组：'+item.WorkTeam+'</li>';
-						// html+='<li>工作负责人：'+item.WorkDirector+'</li>';
-						// html+='<li>企业用工人员数量：'+item.MainWorkerCount+'人</li>';
-						// html+='<li>外来人员数量：'+item.ExternalWorkerCount+'人</li>';
-						// html+='<li title="'+item.CountryUser+'">到岗到位人员：'+item.CountryUser+'</li>';
-						// html+='<li title="'+item.PrecontrolMethod+'">预控措施：'+item.PrecontrolMethod+'</li>';
-						// html+='<li></li></ul>';
-						// html+='<a style="padding-right:30px;" href="javascript:showWorkFile('+item.Id+')"><b>过程资料管控 >></b></a>';
-						// html+='<a href="javascript:showClockRecord('+item.Id+')"><b>打卡情况 >></b></a></div></div>'
-						let gps = item.GpsNumber.split(',');
-						// console.log('GPS',gps, 'scheduleid',item.Id)
-						if (gps) {
-							// L.marker(gps).addTo(map)
-							// 	.bindPopup('<div style="margin:13px;"><b>任务名称：</b><br />'+item.ScheduleName+'</div>')
-							// // 	//.openPopup();
-							// L.marker(gps).addTo(map).on("mouseover", function (e) { 
-							// 	// alert('123123')
-							// 	this.openPopup();
-							// });
-							let marker = L.marker(gps).addTo(map);
-							marker.bindPopup('<div style="margin:13px;"><b>任务名称：</b><br />'+item.ScheduleName+'<br /><b><a href="JavaScript:showJobDetail('+item.Id+');">计划进行详情 >>></a></b></div>');
-							marker.on('mouseover', function (e) {
-							    this.openPopup();
-							});
-							// marker.on('mouseout', function (e) {
-							//     this.closePopup();
-							// });
+			// //获取日计划
+			// function getTodayJobs() {
+			// 	$.getJSON(`${common.baseUrl}api/ScheduleExtend`, function(res) {
+			// 		// console.log(res)
+			// 		if (res.Code != 200) {
+			// 			console.log('加载日计划出错');
+			// 			return;
+			// 		}
+			// 		const data = res.Data;
+			// 		$.each(data, function(i, item) {
+			// 			// var html = '<div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">作业信息&emsp;';
+			// 			// html+='<b class="execute-status">'+item.ExecuteStatus+'</b>&emsp;<b class="execute-status">'+item.RunCheckRank+'</b></h3>';
+			// 			// html+='</div><div class="panel-body"><ul style="display:block;line-height:30px;font-size:10px;">';
+			// 			// html+='<li title="'+item.ConstructCompany+'">作业单位：'+item.ConstructCompany+'</li>';
+			// 			// html+='<li title="'+item.ScheduleName+'">任务名称：'+item.ScheduleName+'</li>';
+			// 			// html+='<li title="'+item.WorkAddress+'">工作地点：'+item.WorkAddress+'</li>';
+			// 			// html+='<li>专业名称：'+item.TaskType+'</li>';
+			// 			// html+='<li>工作班组：'+item.WorkTeam+'</li>';
+			// 			// html+='<li>工作负责人：'+item.WorkDirector+'</li>';
+			// 			// html+='<li>企业用工人员数量：'+item.MainWorkerCount+'人</li>';
+			// 			// html+='<li>外来人员数量：'+item.ExternalWorkerCount+'人</li>';
+			// 			// html+='<li title="'+item.CountryUser+'">到岗到位人员：'+item.CountryUser+'</li>';
+			// 			// html+='<li title="'+item.PrecontrolMethod+'">预控措施：'+item.PrecontrolMethod+'</li>';
+			// 			// html+='<li></li></ul>';
+			// 			// html+='<a style="padding-right:30px;" href="javascript:showWorkFile('+item.Id+')"><b>过程资料管控 >></b></a>';
+			// 			// html+='<a href="javascript:showClockRecord('+item.Id+')"><b>打卡情况 >></b></a></div></div>'
+			// 			let gps = item.GpsNumber.split(',');
+			// 			// console.log('GPS',gps, 'scheduleid',item.Id)
+			// 			if (gps) {
+			// 				// L.marker(gps).addTo(map)
+			// 				// 	.bindPopup('<div style="margin:13px;"><b>任务名称：</b><br />'+item.ScheduleName+'</div>')
+			// 				// // 	//.openPopup();
+			// 				// L.marker(gps).addTo(map).on("mouseover", function (e) { 
+			// 				// 	// alert('123123')
+			// 				// 	this.openPopup();
+			// 				// });
+			// 				let marker = L.marker(gps).addTo(map);
+			// 				marker.bindPopup('<div style="margin:13px;"><b>任务名称：</b><br />'+item.ScheduleName+'<br /><b><a href="JavaScript:showJobDetail('+item.Id+');">计划进行详情 >>></a></b></div>');
+			// 				marker.on('mouseover', function (e) {
+			// 				    this.openPopup();
+			// 				});
+			// 				// marker.on('mouseout', function (e) {
+			// 				//     this.closePopup();
+			// 				// });
+			// 				// L.marker(gps).addTo(map).on('click', function() {
+			// 				// 	showJobDetail(item.Id);
+			// 				// })
+			// 				// L.marker(gps).addTo(map).on('mouseover', function(e) {
+			// 				//   //open popup;
+			// 				//   var popup = L.popup()
+			// 				//    .setLatLng(e.latlng) 
+			// 				//    .setContent('<div style="margin:13px;"><b>任务名称：</b><br />'+item.ScheduleName+'</div>')
+			// 				//    .bringToBack()
+			// 				//    .openOn(map);
+			// 				// });
 							
-							
-							// L.marker(gps).addTo(map).on('click', function() {
-							// 	showJobDetail(item.Id);
-							// })
-							// L.marker(gps).addTo(map).on('mouseover', function(e) {
-							//   //open popup;
-							//   var popup = L.popup()
-							//    .setLatLng(e.latlng) 
-							//    .setContent('<div style="margin:13px;"><b>任务名称：</b><br />'+item.ScheduleName+'</div>')
-							//    .bringToBack()
-							//    .openOn(map);
-							// });
-							
-							// L.marker(gps).addTo(map).on('mouseout', function(e) {
-							//   //close popup;
-							//   this.closePopup();
-							// });
-							// L.marker(gps).addTo(map).on('mouseover', function() {
-							// 	// alert(item.ScheduleName)
-							// 	this.openPopup();
-							// })
+			// 				// L.marker(gps).addTo(map).on('mouseout', function(e) {
+			// 				//   //close popup;
+			// 				//   this.closePopup();
+			// 				// });
+			// 				// L.marker(gps).addTo(map).on('mouseover', function() {
+			// 				// 	// alert(item.ScheduleName)
+			// 				// 	this.openPopup();
+			// 				// })
 
-							// L.marker.bindPopup("Popup content");
-							// L.marker.on('mouseover', function(e) {
-							// 	this.openPopup();
-							// });
-							// L.marker.on('mouseout', function(e) {
-							// 	this.closePopup();
-							// });
-						}
-					});
-					localStorage.setItem('todayJobs', JSON.stringify(data))
-				})
-			}
+			// 				// L.marker.bindPopup("Popup content");
+			// 				// L.marker.on('mouseover', function(e) {
+			// 				// 	this.openPopup();
+			// 				// });
+			// 				// L.marker.on('mouseout', function(e) {
+			// 				// 	this.closePopup();
+			// 				// });
+			// 			}
+			// 		});
+			// 		localStorage.setItem('todayJobs', JSON.stringify(data))
+			// 	})
+			// }
 			
 			// $('.leaflet-marker-icon')
 
-			function showJobDetail(id) {
-				//iframe层
-				layer.open({
-					type: 2,
-					title: '计划进行详情',
-					shadeClose: true,
-					shade: 0.4,
-					area: ['1200px', '90%'],
-					content: 'job_detail.html?id=' + id //iframe的url
-				});
-			}
+			// function showJobDetail(id) {
+			// 	//iframe层
+			// 	layer.open({
+			// 		type: 2,
+			// 		title: '计划进行详情',
+			// 		shadeClose: true,
+			// 		shade: 0.4,
+			// 		area: ['1200px', '90%'],
+			// 		content: 'job_detail.html?id=' + id //iframe的url
+			// 	});
+			// }
 
-			function testClick() {
-				alert('弹出框')
-			}
+			// function testClick() {
+			// 	alert('弹出框')
+			// }
 
-			function workView() {
-				$.getJSON(`${common.baseUrl}api/Job/TodayJobTotal`, function(res) {
-					//			console.log(res)
-					if (res.Code === 200) {
-						$('#today-total').text(res.Data.total);
-						$('#high-risk-total').text(res.Data.highRiskTotal);
-					}
-				})
-			}
+			// function workView() {
+			// 	$.getJSON(`${common.baseUrl}api/Job/TodayJobTotal`, function(res) {
+			// 		//			console.log(res)
+			// 		if (res.Code === 200) {
+			// 			$('#today-total').text(res.Data.total);
+			// 			$('#high-risk-total').text(res.Data.highRiskTotal);
+			// 		}
+			// 	})
+			// }
+			
+			// // 开工情况
+			// function jobView() {
+			// 	$.getJSON(`${common.baseUrl}api/Job/JobStartTotal`, function(res) {
+			// 		//			console.log(res)
+			// 		if (res.Code === 200) {
+			// 			let d = res.Data;
 
-			function jobView() {
-				$.getJSON(`${common.baseUrl}api/Job/JobStartTotal`, function(res) {
-					//			console.log(res)
-					if (res.Code === 200) {
-						let d = res.Data;
+			// 			$('#job-nostart').text(d.jobStart.NotStart);
+			// 			$('#job-executing').text(d.jobStart.Executing);
+			// 			$('#job-success').text(d.jobStart.Success);
 
-						$('#job-nostart').text(d.jobStart.NotStart);
-						$('#job-executing').text(d.jobStart.Executing);
-						$('#job-success').text(d.jobStart.Success);
+			// 			$.each(d.classifyTotal, function(i, item) {
+			// 				if (item.TaskType === '基建工程') {
+			// 					$('#jijiangongcheng').text(item.Count)
+			// 				} else if (item.TaskType === '配网工程') {
+			// 					$('#peiwanggongcheng').text(item.Count)
+			// 				} else if (item.TaskType === '农网工程') {
+			// 					$('#nongwanggongcheng').text(item.Count)
+			// 				} else if (item.TaskType === '小型基建') {
+			// 					$('#xiaoxingjijian').text(item.Count)
+			// 				} else if (item.TaskType === '生产性大修技改') {
+			// 					$('#shengchanxingjigai').text(item.Count)
+			// 				} else if (item.TaskType === '非生产性大修技改') {
+			// 					$('#feishengchanxingjigai').text(item.Count)
+			// 				} else if (item.TaskType === '运维检修') {
+			// 					$('#yunweijianxiu').text(item.Count)
+			// 				} else if (item.TaskType === '营销作业') {
+			// 					$('#yingxiaozuoye').text(item.Count)
+			// 				} else if (item.TaskType === '通信作业') {
+			// 					$('#tongxinzuoye').text(item.Count)
+			// 				} else if (item.TaskType === '信息作业') {
+			// 					$('#xinxizuoye').text(item.Count)
+			// 				}
+			// 			});
+			// 		}
+			// 	})
+			// }
 
-						$.each(d.classifyTotal, function(i, item) {
-							if (item.TaskType === '基建工程') {
-								$('#jijiangongcheng').text(item.Count)
-							} else if (item.TaskType === '配网工程') {
-								$('#peiwanggongcheng').text(item.Count)
-							} else if (item.TaskType === '农网工程') {
-								$('#nongwanggongcheng').text(item.Count)
-							} else if (item.TaskType === '小型基建') {
-								$('#xiaoxingjijian').text(item.Count)
-							} else if (item.TaskType === '生产性大修技改') {
-								$('#shengchanxingjigai').text(item.Count)
-							} else if (item.TaskType === '非生产性大修技改') {
-								$('#feishengchanxingjigai').text(item.Count)
-							} else if (item.TaskType === '运维检修') {
-								$('#yunweijianxiu').text(item.Count)
-							} else if (item.TaskType === '营销作业') {
-								$('#yingxiaozuoye').text(item.Count)
-							} else if (item.TaskType === '通信作业') {
-								$('#tongxinzuoye').text(item.Count)
-							} else if (item.TaskType === '信息作业') {
-								$('#xinxizuoye').text(item.Count)
-							}
-						});
-					}
-				})
-			}
+			// function riskView() {
+			// 	$.getJSON(`${common.baseUrl}api/Job/RiskTotal`, function(res) {
+			// 		//			console.log(res)
+			// 		if (res.Code === 200) {
+			// 			var d = res.Data;
+			// 			$('#power-4-1').text(d.Power4_1)
+			// 			$('#power-5').text(d.Power5)
+			// 			$('#power-6').text(d.Power6)
+			// 			$('#power-8-7').text(d.Power8_7)
+			// 			$('#run-1-2').text(d.Run1_2)
+			// 			$('#run-3').text(d.Run3)
+			// 			$('#run-4').text(d.Run4)
+			// 			$('#run-5').text(d.Run5)
+			// 			$('#base-1-2').text(d.Base1_2)
+			// 			$('#base-3').text(d.Base3)
+			// 			$('#base-4').text(d.Base4)
+			// 			$('#base-5').text(d.Base5)
+			// 		}
+			// 	})
+			// }
 
-			function riskView() {
-				$.getJSON(`${common.baseUrl}api/Job/RiskTotal`, function(res) {
-					//			console.log(res)
-					if (res.Code === 200) {
-						var d = res.Data;
-						$('#power-4-1').text(d.Power4_1)
-						$('#power-5').text(d.Power5)
-						$('#power-6').text(d.Power6)
-						$('#power-8-7').text(d.Power8_7)
-						$('#run-1-2').text(d.Run1_2)
-						$('#run-3').text(d.Run3)
-						$('#run-4').text(d.Run4)
-						$('#run-5').text(d.Run5)
-						$('#base-1-2').text(d.Base1_2)
-						$('#base-3').text(d.Base3)
-						$('#base-4').text(d.Base4)
-						$('#base-5').text(d.Base5)
-					}
-				})
-			}
+			// function showWorkFile(id) {
+			// 	//iframe层
+			// 	layer.open({
+			// 		type: 2,
+			// 		title: '过程资料管控',
+			// 		shadeClose: true,
+			// 		shade: 0.8,
+			// 		area: ['700px', '90%'],
+			// 		content: 'work_file.html?id=' + id //iframe的url
+			// 	});
+			// }
 
-			function showWorkFile(id) {
-				//iframe层
-				layer.open({
-					type: 2,
-					title: '过程资料管控',
-					shadeClose: true,
-					shade: 0.8,
-					area: ['700px', '90%'],
-					content: 'work_file.html?id=' + id //iframe的url
-				});
-			}
+			// function showClockRecord(id) {
+			// 	//iframe层
+			// 	layer.open({
+			// 		type: 2,
+			// 		title: '打卡情况',
+			// 		shadeClose: true,
+			// 		shade: 0.8,
+			// 		area: ['700px', '90%'],
+			// 		content: 'clock.html?id=' + id //iframe的url
+			// 	});
+			// }
 
-			function showClockRecord(id) {
-				//iframe层
-				layer.open({
-					type: 2,
-					title: '打卡情况',
-					shadeClose: true,
-					shade: 0.8,
-					area: ['700px', '90%'],
-					content: 'clock.html?id=' + id //iframe的url
-				});
-			}
+			// function showWarnFile(id, errortime) {
+			// 	//iframe层
+			// 	layer.open({
+			// 		type: 2,
+			// 		title: '异常资料',
+			// 		shadeClose: true,
+			// 		shade: 0.8,
+			// 		area: ['700px', '90%'],
+			// 		//		  content: 'warn.html?id='+id //iframe的url
+			// 		content: `warn.html?id=${id}&errortime=${errortime}`
+			// 	});
+			// }
 
-			function showWarnFile(id, errortime) {
-				//iframe层
-				layer.open({
-					type: 2,
-					title: '异常资料',
-					shadeClose: true,
-					shade: 0.8,
-					area: ['700px', '90%'],
-					//		  content: 'warn.html?id='+id //iframe的url
-					content: `warn.html?id=${id}&errortime=${errortime}`
-				});
-			}
+			// // 定义circle_layer
+			// let circle_layer = '';
 
-			// 定义circle_layer
-			let circle_layer = '';
+			// function showAbnormal(id, errortime) {
+			// 	if (circle_layer && circle_layer !== '') {
+			// 		map.removeLayer(circle_layer)
+			// 	}
 
-			function showAbnormal(id, errortime) {
-				if (circle_layer && circle_layer !== '') {
-					map.removeLayer(circle_layer)
-				}
+			// 	//	    var item = JSON.parse(localStorage.getItem('TodayJob'+id));
+			// 	var todayJobs = JSON.parse(localStorage.getItem('todayJobs'))
+			// 	let currentJobs = todayJobs.filter(function(item) {
+			// 		return item.Id === id;
+			// 	})
+			// 	let item = currentJobs[0]
+			// 	var html =
+			// 		'<div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">异常信息</b></h3></div><div class="panel-body">';
+			// 	html += '<h3>连续三次人脸识别异常</h3>'
+			// 	html += '<ul style="display:block;line-height:30px;font-size:10px;"><li>作业单位：' + item.ConstructCompany + '</li>';
+			// 	html += '<li>任务名称：' + item.ScheduleName + '</li>';
+			// 	html += '<li>工作地点：' + item.WorkAddress + '</li>';
+			// 	html += '<li>专业名称：' + item.TaskType + '</li>';
+			// 	html += '<li>工作班组：' + item.ScheduleName + '</li>';
+			// 	html += '<li>工作负责人：' + item.WorkDirector + '</li>';
+			// 	html += '<li>企业用工人员数量：5人</li>';
+			// 	html += '<li>外来人员数量：10人</li>';
+			// 	html += '<li>到岗到位人员：' + item.ScheduleName + '</li>';
+			// 	html += '<li>预控措施：无</li><li></li></ul>';
+			// 	html += '<a href="javascript:showWarnFile(' + id + ', ' + errortime + ')"><b>异常资料 >></b></a></div></div>';
 
-				//	    var item = JSON.parse(localStorage.getItem('TodayJob'+id));
-				var todayJobs = JSON.parse(localStorage.getItem('todayJobs'))
-				let currentJobs = todayJobs.filter(function(item) {
-					return item.Id === id;
-				})
-				let item = currentJobs[0]
-				var html =
-					'<div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">异常信息</b></h3></div><div class="panel-body">';
-				html += '<h3>连续三次人脸识别异常</h3>'
-				html += '<ul style="display:block;line-height:30px;font-size:10px;"><li>作业单位：' + item.ConstructCompany + '</li>';
-				html += '<li>任务名称：' + item.ScheduleName + '</li>';
-				html += '<li>工作地点：' + item.WorkAddress + '</li>';
-				html += '<li>专业名称：' + item.TaskType + '</li>';
-				html += '<li>工作班组：' + item.ScheduleName + '</li>';
-				html += '<li>工作负责人：' + item.WorkDirector + '</li>';
-				html += '<li>企业用工人员数量：5人</li>';
-				html += '<li>外来人员数量：10人</li>';
-				html += '<li>到岗到位人员：' + item.ScheduleName + '</li>';
-				html += '<li>预控措施：无</li><li></li></ul>';
-				html += '<a href="javascript:showWarnFile(' + id + ', ' + errortime + ')"><b>异常资料 >></b></a></div></div>';
+			// 	let gps = item.GpsNumber.split(',');
+			// 	//			let gpsNumber = kcode2wgs(item.GpsNumber);		
+			// 	//			let gps = gpsNumber.split(',');
+			// 	circle_layer = L.circle(gps, 10000, {
+			// 		color: 'red',
+			// 		fillColor: '#f03',
+			// 		fillOpacity: 0.5
+			// 	}).addTo(map).bindPopup(html);
+			// }
 
-				let gps = item.GpsNumber.split(',');
-				//			let gpsNumber = kcode2wgs(item.GpsNumber);		
-				//			let gps = gpsNumber.split(',');
-				circle_layer = L.circle(gps, 10000, {
-					color: 'red',
-					fillColor: '#f03',
-					fillOpacity: 0.5
-				}).addTo(map).bindPopup(html);
-			}
+			// function getAttendFail() {
+			// 	//		console.error('请求异常打卡 ')
+			// 	//		$.getJSON('https://dltfaceui.700t.com/api/ClockreRord/Get_ClockFalisList', function(res){
+			// 	try {
+			// 		$.getJSON(`${common.baseUrl}api/Clock/Fails`, function(res) {
+			// 			if (res.Code === 200) {
+			// 				if (res.Data instanceof Array && res.Data.length > 0) {
+			// 					let html = ''
+			// 					$.each(res.Data, function(index, item) {
+			// 						//					console.log(item.ErrorTime)
+			// 						var oldTime = (new Date(item.ErrorTime)).getTime(); //得到毫秒数
+			// 						//					console.log(oldTime)
+			// 						//					var newTime = new Date(oldTime); //就得到普通的时间了
+			// 						//					console.log(newTime)
+			// 						//					html += `<li><img src="warn2.png"/><span>${item.ErrorTime}</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(${item.WorkId},${errortime})">详情</a></li>`
+			// 						html += '<li><img src="warn2.png"/><span>' + item.ErrorTime +
+			// 							'</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(' + item.WorkId +
+			// 							',' +
+			// 							oldTime + ')">详情</a></li>'
+			// 					});
+			// 					$('.tips-box ul').empty().append(html)
+			// 				}
+			// 			}
+			// 			setTimeout('getAttendFail()', 10000)
+			// 		})
+			// 	} catch (e) {
+			// 		console.log(e)
+			// 		getAttendFail()
+			// 	}
+			// }
 
-			function getAttendFail() {
-				//		console.error('请求异常打卡 ')
-				//		$.getJSON('https://dltfaceui.700t.com/api/ClockreRord/Get_ClockFalisList', function(res){
-				try {
-					$.getJSON(`${common.baseUrl}api/Clock/Fails`, function(res) {
-						if (res.Code === 200) {
-							if (res.Data instanceof Array && res.Data.length > 0) {
-								let html = ''
-								$.each(res.Data, function(index, item) {
-									//					console.log(item.ErrorTime)
-									var oldTime = (new Date(item.ErrorTime)).getTime(); //得到毫秒数
-									//					console.log(oldTime)
-									//					var newTime = new Date(oldTime); //就得到普通的时间了
-									//					console.log(newTime)
-									//					html += `<li><img src="warn2.png"/><span>${item.ErrorTime}</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(${item.WorkId},${errortime})">详情</a></li>`
-									html += '<li><img src="warn2.png"/><span>' + item.ErrorTime +
-										'</span>项目打卡异常&ensp;<a href="javascript:showAbnormal(' + item.WorkId +
-										',' +
-										oldTime + ')">详情</a></li>'
-								});
-								$('.tips-box ul').empty().append(html)
-							}
-						}
-						setTimeout('getAttendFail()', 10000)
-					})
-				} catch (e) {
-					console.log(e)
-					getAttendFail()
-				}
-			}
-
-			function kcode2wgs(kcode) {
-				let lat = DecodeLat(kcode);
-				let lon = DecodeLon(kcode);
-				let res = GPS.gcj_decrypt(lat, lon)
-				return res.lat + ',' + res.lon;
-			}
+			// function kcode2wgs(kcode) {
+			// 	let lat = DecodeLat(kcode);
+			// 	let lon = DecodeLon(kcode);
+			// 	let res = GPS.gcj_decrypt(lat, lon)
+			// 	return res.lat + ',' + res.lon;
+			// }
 		</script>
 	</body>
 </html>

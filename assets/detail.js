@@ -1,5 +1,3 @@
-// var baseUrl = 'https://dltfaceui.700t.com/';
-// var baseUrl = 'http://localhost:5000/';
 
 var jobId = getQueryVariable('id');
 // console.log(jobId)
